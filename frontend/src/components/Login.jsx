@@ -1,0 +1,127 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+function Login() {
+  const [email, setEmail] = useState('');
+  const [contraseña, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Nuevo estado para loading
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true); // Mostrar estado de carga
+    setError(''); // Limpiar errores previos
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, contraseña }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al iniciar sesión');
+      }
+
+      localStorage.setItem('token', data.token); // Guardar token en localStorage
+      login(data.user, data.token); // Pasar token al contexto
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Error al iniciar sesión');
+    } finally {
+      setLoading(false); // Finalizar estado de carga
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:3000/api/validate-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Token inválido');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.user) {
+            login(data.user, token); // Restaurar sesión
+            navigate('/dashboard');
+          } else {
+            throw new Error('Usuario no encontrado');
+          }
+        })
+        .catch(error => {
+          console.log(error.message);
+          localStorage.removeItem('token'); // Eliminar token inválido
+        });
+    }
+  }, [login, navigate]);
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Iniciar Sesión</h2>
+        {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2" htmlFor="password">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={contraseña}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+              disabled={loading}
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-blue-300"
+            disabled={loading}
+          >
+            {loading ? 'Cargando...' : 'Iniciar Sesión'}
+          </button>
+        </form>
+        <p className="mt-6 text-center text-gray-700">
+          ¿No tienes una cuenta?{' '}
+          <Link to="/register" className="text-blue-500 font-medium hover:underline">
+            Regístrate
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default Login;
