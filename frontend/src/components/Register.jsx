@@ -34,6 +34,7 @@ function Register() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <img src="/src/assets/logo.png" alt="Logo" className="mx-auto mb-4 w-32 h-32" />
         <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Registrarse</h2>
         {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
         <form onSubmit={handleSubmit}>

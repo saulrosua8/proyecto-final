@@ -72,12 +72,13 @@ function Login() {
   }, [login, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Iniciar Sesión</h2>
-        {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-teal-500 to-blue-600">
+      <div className="bg-white p-10 rounded-xl shadow-xl w-full max-w-lg">
+        <img src="/src/assets/logo.png" alt="Logo" className="mx-auto mb-4 w-32 h-32" />
+        <h2 className="text-4xl font-bold mb-8 text-center text-gray-800">Iniciar Sesión</h2>
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
               Email
             </label>
@@ -86,7 +87,7 @@ function Login() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
               required
               disabled={loading}
             />
@@ -100,22 +101,22 @@ function Login() {
               id="password"
               value={contraseña}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
               required
               disabled={loading}
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-blue-300"
+            className="w-full bg-teal-600 text-white py-4 rounded-lg font-semibold hover:bg-teal-700 transition disabled:bg-teal-300"
             disabled={loading}
           >
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
         </form>
-        <p className="mt-6 text-center text-gray-700">
+        <p className="mt-8 text-center text-gray-700">
           ¿No tienes una cuenta?{' '}
-          <Link to="/register" className="text-blue-500 font-medium hover:underline">
+          <Link to="/register" className="text-teal-500 font-medium hover:underline">
             Regístrate
           </Link>
         </p>

@@ -8,4 +8,7 @@ router.get('/', clubController.getAllClubs);
 // Ruta para buscar clubes
 router.get('/search', clubController.searchClubs);
 
+// Ruta para crear un club
+router.post('/create', clubController.createClub);
+
 module.exports = router;

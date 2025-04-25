@@ -116,17 +116,35 @@ function Dashboard() {
       </div>
     );
   }
-
+  console.log(user);
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <header className="bg-teal-500 text-white p-4 rounded mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">PadelClubManager</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Cerrar Sesión
-        </button>
+        <div className="flex items-center gap-4">
+          <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-24 h-24 object-contain" />
+          <h1
+            className="text-2xl font-bold cursor-pointer"
+            onClick={() => navigate('/dashboard')}
+          >
+            MatchPointRS
+          </h1>
+        </div>
+        <div className="flex items-center gap-4">
+          {user.rol === 'Administrador' && (
+            <button
+              onClick={() => navigate('/master')}
+              className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
+            >
+              Panel Master
+            </button>
+          )}
+          <button
+            onClick={handleLogout}
+            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
       </header>
 
       <div className="bg-white p-6 rounded shadow-md mb-6">

@@ -96,7 +96,7 @@ const userController = {
 
                 // Generar el token JWT
                 const token = jwt.sign(
-                    { id: user.id_usuario, nombre: user.nombre, email: user.email },
+                    { id: user.id_usuario, nombre: user.nombre, email: user.email, rol: user.rol },
                     'clave_secreta',
                     { expiresIn: '1h' } // Token válido por 1 hora
                 );
@@ -106,7 +106,8 @@ const userController = {
                     user: {
                         id: user.id_usuario,
                         nombre: user.nombre,
-                        email: user.email
+                        email: user.email,
+                        rol: user.rol
                     },
                     token // Enviar el token al cliente
                 });

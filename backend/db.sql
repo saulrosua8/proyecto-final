@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2025 a las 11:39:58
+-- Tiempo de generación: 25-04-2025 a las 16:52:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,15 +35,20 @@ CREATE TABLE `clubes` (
   `telefono` varchar(20) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL,
   `apertura` time NOT NULL COMMENT 'Hora de apertura (p.ej. 08:30:00)',
-  `cierre` time NOT NULL COMMENT 'Hora de cierre (p.ej. 17:00:00)'
+  `cierre` time NOT NULL COMMENT 'Hora de cierre (p.ej. 17:00:00)',
+  `descripcion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `clubes`
 --
 
-INSERT INTO `clubes` (`id_club`, `nombre`, `provincia`, `direccion`, `telefono`, `id_usuario`, `apertura`, `cierre`) VALUES
-(1, 'Padel Club Madrid Centro', '', 'C/ Alcalá 123, Madrid', '915 00 11 22', 2, '08:30:00', '17:00:00');
+INSERT INTO `clubes` (`id_club`, `nombre`, `provincia`, `direccion`, `telefono`, `id_usuario`, `apertura`, `cierre`, `descripcion`) VALUES
+(2, 'Padel Club Madrid Centro', 'Madrid', 'C/ Alcalá 123, Madrid', '915001122', 2, '08:30:00', '17:00:00', ''),
+(3, 'Club de Padel Barcelona', 'Barcelona', 'Rambla 45, Barcelona', '934001122', 2, '07:00:00', '22:00:00', ''),
+(4, 'Padel Sevilla Arena', 'Sevilla', 'Av. de la Constitución 50, Sevilla', '954001122', 2, '09:00:00', '21:00:00', ''),
+(5, 'Alicante Padel Club', 'Valencia', 'C/ Colón 76, Valencia', '963001122', 2, '08:00:00', '20:00:00', ''),
+(6, 'Bilbao Padel Center', 'Bizkaia', 'Gran Vía de Don Diego López de Haro 10, Bilbao', '944001122', 2, '10:00:00', '18:00:00', '');
 
 -- --------------------------------------------------------
 
@@ -60,24 +65,6 @@ CREATE TABLE `horarios_stack` (
   `duracion` int(11) NOT NULL COMMENT 'Duración en minutos'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `horarios_stack`
---
-
-INSERT INTO `horarios_stack` (`id_horario`, `id_pista`, `fecha`, `hora_inicio`, `hora_fin`, `duracion`) VALUES
-(1, 1, '2025-04-25', '08:30:00', '10:00:00', 90),
-(2, 1, '2025-04-25', '10:00:00', '11:30:00', 90),
-(3, 1, '2025-04-25', '11:30:00', '13:00:00', 90),
-(4, 1, '2025-04-25', '13:00:00', '14:30:00', 90),
-(5, 1, '2025-04-25', '14:30:00', '16:00:00', 90),
-(6, 1, '2025-04-25', '15:30:00', '17:00:00', 90),
-(7, 2, '2025-04-25', '08:30:00', '10:00:00', 90),
-(8, 2, '2025-04-25', '10:00:00', '11:30:00', 90),
-(9, 2, '2025-04-25', '11:30:00', '13:00:00', 90),
-(10, 2, '2025-04-25', '13:00:00', '14:30:00', 90),
-(11, 2, '2025-04-25', '14:30:00', '16:00:00', 90),
-(12, 2, '2025-04-25', '15:30:00', '17:00:00', 90);
-
 -- --------------------------------------------------------
 
 --
@@ -90,14 +77,6 @@ CREATE TABLE `pistas` (
   `nombre` varchar(50) NOT NULL,
   `tipo` enum('Cubierta','Exterior','Mixta') NOT NULL DEFAULT 'Cubierta'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `pistas`
---
-
-INSERT INTO `pistas` (`id_pista`, `id_club`, `nombre`, `tipo`) VALUES
-(1, 1, 'Pista Central', 'Cubierta'),
-(2, 1, 'Pista 2', 'Exterior');
 
 -- --------------------------------------------------------
 
@@ -113,14 +92,6 @@ CREATE TABLE `reservas` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `reservas`
---
-
-INSERT INTO `reservas` (`id_reserva`, `id_horario`, `id_usuario`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 2, 3, 'Confirmada', '2025-04-25 11:20:27', '2025-04-25 11:20:27'),
-(2, 10, 4, 'Pendiente', '2025-04-25 11:20:27', '2025-04-25 11:20:27');
 
 -- --------------------------------------------------------
 
@@ -195,7 +166,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `clubes`
 --
 ALTER TABLE `clubes`
-  MODIFY `id_club` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_club` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `horarios_stack`
