@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function MasterView() {
   const [clubs, setClubs] = useState([]);
   const [form, setForm] = useState({
+    id_club: null,
     nombre: '',
     provincia: '',
     direccion: '',
@@ -13,6 +15,7 @@ function MasterView() {
     descripcion: '',
   });
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     fetch('http://localhost:3000/api/clubs')
@@ -28,42 +31,114 @@ function MasterView() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:3000/api/clubs/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, id_usuario: 1 }), // ID de usuario administrador
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al crear el club');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        alert('Club creado exitosamente');
-        setClubs([...clubs, { ...form, id_club: data.id }]);
-        setForm({
-          nombre: '',   
-          provincia: '',
-          direccion: '',
-          telefono: '',
-          apertura: '08:00',
-          cierre: '22:00',
-          descripcion: '',
-        });
-      })
-      .catch((error) => alert(error.message));
-  };
+
+    if (form.id_club) {
+        // Editar club existente
+        fetch(`http://localhost:3000/api/clubs/${form.id_club}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el club');
+                }
+                return response.json();
+            })
+            .then(() => {
+                alert('Club actualizado exitosamente');
+                setClubs(clubs.map((club) => (club.id_club === form.id_club ? form : club)));
+                setForm({
+                    id_club: null,
+                    nombre: '',
+                    provincia: '',
+                    direccion: '',
+                    telefono: '',
+                    apertura: '08:00',
+                    cierre: '22:00',
+                    descripcion: '',
+                });
+            })
+            .catch((error) => alert(error.message));
+    } else {
+        // Crear nuevo club
+        fetch('http://localhost:3000/api/clubs/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...form, id_usuario: 1 }), // ID de usuario administrador
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al crear el club');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                alert('Club creado exitosamente');
+                setClubs([...clubs, { ...form, id_club: data.id }]);
+                setForm({
+                    id_club: null,
+                    nombre: '',
+                    provincia: '',
+                    direccion: '',
+                    telefono: '',
+                    apertura: '08:00',
+                    cierre: '22:00',
+                    descripcion: '',
+                });
+            })
+            .catch((error) => alert(error.message));
+    }
+};
+
+  const handleDeleteClub = (id_club) => {
+    if (window.confirm('¿Estás seguro de que deseas borrar este club?')) {
+        fetch(`http://localhost:3000/api/clubs/${id_club}`, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al borrar el club');
+                }
+                setClubs(clubs.filter((club) => club.id_club !== id_club));
+                alert('Club borrado exitosamente');
+            })
+            .catch((error) => alert(error.message));
+    }
+};
+
+const handleEditClub = (id_club) => {
+    const clubToEdit = clubs.find((club) => club.id_club === id_club);
+    if (clubToEdit) {
+        setForm({ ...clubToEdit });
+    }
+};
 
   return (
     <div className="p-4">
       <header className="bg-teal-500 text-white p-4 rounded mb-6 flex justify-between items-center">
-        <h1
-          className="text-2xl font-bold cursor-pointer"
-          onClick={() => navigate('/dashboard')}
-        >
-          MatchPointRS
-        </h1>
+        <div className="flex items-center gap-4">
+          <a href="/dashboard">
+            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-24 h-24 object-contain" />
+          </a>
+          <h1
+            className="text-2xl font-bold cursor-pointer"
+            onClick={() => navigate('/dashboard')}
+          >
+            MatchPointRS
+          </h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -152,6 +227,20 @@ function MasterView() {
                 <div>
                   <h3 className="font-bold text-lg">{club.nombre}</h3>
                   <p className="text-sm text-gray-600">{club.provincia}</p>
+                </div>
+                <div className="ml-auto flex gap-2">
+                  <button
+                    onClick={() => handleEditClub(club.id_club)}
+                    className="bg-teal-500 text-white px-2 py-1 rounded hover:bg-teal-600"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClub(club.id_club)}
+                    className="bg-teal-700 text-white px-2 py-1 rounded hover:bg-teal-800"
+                  >
+                    Borrar
+                  </button>
                 </div>
               </div>
             ))}

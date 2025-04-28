@@ -138,6 +138,14 @@ function Dashboard() {
               Panel Master
             </button>
           )}
+          {['Administrador', 'Club'].includes(user.rol) && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
+            >
+              Panel Admin
+            </button>
+          )}
           <button
             onClick={handleLogout}
             className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"

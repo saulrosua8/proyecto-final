@@ -53,6 +53,52 @@ const clubController = {
             res.status(201).json({ message: 'Club creado exitosamente', id: result.insertId });
         });
     },
+
+    deleteClub: (req, res) => {
+        const { id_club } = req.params;
+        if (!id_club) {
+            return res.status(400).json({ error: 'El ID del club es requerido' });
+        }
+
+        const sql = 'DELETE FROM clubes WHERE id_club = ?';
+        db.query(sql, [id_club], (err, result) => {
+            if (err) {
+                console.error('Error al borrar club:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Club no encontrado' });
+            }
+
+            res.status(200).json({ message: 'Club borrado exitosamente' });
+        });
+    },
+
+    updateClub: (req, res) => {
+        const { id_club } = req.params;
+        const { nombre, provincia, direccion, telefono, apertura, cierre, descripcion } = req.body;
+
+        if (!id_club || !nombre || !provincia || !direccion || !telefono || !apertura || !cierre || !descripcion) {
+            return res.status(400).json({ error: 'Todos los campos son requeridos' });
+        }
+
+        const sql = `UPDATE clubes SET nombre = ?, provincia = ?, direccion = ?, telefono = ?, apertura = ?, cierre = ?, descripcion = ? WHERE id_club = ?`;
+        const params = [nombre, provincia, direccion, telefono, apertura, cierre, descripcion, id_club];
+
+        db.query(sql, params, (err, result) => {
+            if (err) {
+                console.error('Error al actualizar club:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Club no encontrado' });
+            }
+
+            res.status(200).json({ message: 'Club actualizado exitosamente' });
+        });
+    }
 };
 
 module.exports = clubController;
