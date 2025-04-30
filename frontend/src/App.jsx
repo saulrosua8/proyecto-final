@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import MasterView from './components/MasterView';
+import AdminView from './components/AdminView';
 import './index.css';
 
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/master" element={<MasterView />} />
+          <Route path="/admin" element={<AdminView />} />
           <Route path="/" element={<Login />} />
         </Routes>
       </div>
