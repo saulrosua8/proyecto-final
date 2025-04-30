@@ -185,8 +185,32 @@ const clubController = {
             }
             res.status(200).json({ message: 'Logo subido correctamente como BLOB' });
         });
+    },
+
+    getClubLogo: (req, res) => {
+        const { id_club } = req.params;
+
+        if (!id_club) {
+            return res.status(400).json({ error: 'El ID del club es requerido' });
+        }
+
+        const sql = 'SELECT logo, logo_mimetype FROM clubes WHERE id_club = ?';
+        db.query(sql, [id_club], (err, results) => {
+            if (err) {
+                console.error('Error al obtener el logo:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+
+            if (results.length === 0 || !results[0].logo) {
+                return res.status(404).json({ error: 'Logo no encontrado' });
+            }
+
+            const { logo, logo_mimetype } = results[0];
+            res.setHeader('Content-Type', logo_mimetype);
+            res.send(logo);
+        });
     }
-};
+  };
 
 module.exports = {
     ...clubController,

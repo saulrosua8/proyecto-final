@@ -185,10 +185,12 @@ const AdminView = () => {
         </div>
       </header>
 
-      <h1 className="text-2xl font-bold">Panel de Administración</h1>
-      <p className="text-gray-600">Gestiona las pistas y personalización de tu club.</p>
+      <div className="bg-white p-6 rounded shadow-md mb-6">
+        <h3 className="text-xl font-bold mb-4">Panel de Administración</h3>
+        <p className="text-gray-600">Gestiona las pistas y personalización de tu club.</p>
+      </div>
 
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-3 gap-4">
         {/* Pistas */}
         <div className="bg-white p-4 rounded shadow col-span-1">
           <h2 className="text-xl font-semibold">Pistas</h2>
