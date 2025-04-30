@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2025 a las 10:05:11
+-- Tiempo de generación: 30-04-2025 a las 20:41:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -36,20 +36,23 @@ CREATE TABLE `clubes` (
   `id_usuario` int(11) NOT NULL,
   `apertura` time NOT NULL COMMENT 'Hora de apertura (p.ej. 08:30:00)',
   `cierre` time NOT NULL COMMENT 'Hora de cierre (p.ej. 17:00:00)',
-  `descripcion` text NOT NULL
+  `descripcion` text NOT NULL,
+  `logo` longblob DEFAULT NULL,
+  `logo_filename` varchar(255) DEFAULT NULL,
+  `logo_mimetype` varchar(100) DEFAULT NULL,
+  `logo_size` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `clubes`
 --
 
-INSERT INTO `clubes` (`id_club`, `nombre`, `provincia`, `direccion`, `telefono`, `id_usuario`, `apertura`, `cierre`, `descripcion`) VALUES
-(3, 'Club de Padel Barcelona', 'Barcelona', 'Rambla 45, Barcelona', '934001122', 2, '07:00:00', '22:00:00', 'desc'),
-(4, 'Padel Sevilla Arena', 'Sevilla', 'Av. de la Constitución 50, Sevilla', '954001122', 2, '09:00:00', '21:00:00', 'desc'),
-(5, 'Alicante Padel Club', 'Valencia', 'C/ Colón 76, Valencia', '963001122', 2, '08:00:00', '20:00:00', 'desc'),
-(6, 'Bilbao Padel Center', 'Bizkaia', 'Gran Vía de Don Diego López de Haro 10, Bilbao', '944001122', 2, '10:00:00', '18:00:00', 'desc'),
-(7, 'Padel Club Lucena', 'Córdoba', 'C7 CAWNMD', '628308078', 1, '11:00:00', '18:00:00', 'cLUB DE PADEL LUCENA'),
-(9, 'Padel Club Alacala', 'Madrid', 'c/cadf', '62830879', 1, '08:00:00', '01:00:00', 'wed');
+INSERT INTO `clubes` (`id_club`, `nombre`, `provincia`, `direccion`, `telefono`, `id_usuario`, `apertura`, `cierre`, `descripcion`, `logo`, `logo_filename`, `logo_mimetype`, `logo_size`) VALUES
+(3, 'Club de Padel Barcelona', 'Barcelona', 'Rambla 45, Barcelona', '934001122', 5, '07:00:00', '22:00:00', 'desc', NULL, NULL, NULL, NULL),
+(4, 'Padel Sevilla Arena', 'Sevilla', 'Av. de la Constitución 50, Sevilla', '954001122', 2, '09:00:00', '21:00:00', 'desc', NULL, NULL, NULL, NULL),
+(5, 'Alicante Padel Club', 'Valencia', 'C/ Colón 76, Valencia', '963001122', 2, '08:00:00', '20:00:00', 'desc', NULL, NULL, NULL, NULL),
+(6, 'Bilbao Padel Center', 'Bizkaia', 'Gran Vía de Don Diego López de Haro 10, Bilbao', '944001122', 2, '10:00:00', '18:00:00', 'desc', NULL, NULL, NULL, NULL),
+(7, 'Padel Club Lucena', 'Córdoba', 'C7 CAWNMD', '628308078', 1, '11:00:00', '18:00:00', 'cLUB DE PADEL LUCENA', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -80,6 +83,14 @@ CREATE TABLE `pistas` (
   `tipo` enum('Cubierta','Exterior','Mixta') NOT NULL DEFAULT 'Cubierta',
   `precio` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pistas`
+--
+
+INSERT INTO `pistas` (`id_pista`, `id_club`, `nombre`, `tipo`, `precio`) VALUES
+(3, 7, 'Pista2', 'Exterior', 12),
+(4, 7, 'Pista3', 'Exterior', 12);
 
 -- --------------------------------------------------------
 
@@ -120,7 +131,9 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `contraseña`, `rol`, `
 (1, 'admin', 'saul.rosua.ortiz@gmail.com', '$2b$10$VhKa7Mubr7d5rrqJKIr6hOQWBzeIsQM1jr/5OFcouAcTI6sNQuU5.', 'Administrador', '2025-04-25 10:45:31'),
 (2, 'Club Madrid Centro', 'madrid.centro@padelclub.com', '$2b$10$EjemploHashClub...', 'Club', '2025-04-25 11:20:27'),
 (3, 'Juan Pérez', 'juan.perez@example.com', '$2b$10$EjemploHashUser...', 'Cliente', '2025-04-25 11:20:27'),
-(4, 'Ana López', 'ana.lopez@example.com', '$2b$10$EjemploHashUser...', 'Cliente', '2025-04-25 11:20:27');
+(4, 'Ana López', 'ana.lopez@example.com', '$2b$10$EjemploHashUser...', 'Cliente', '2025-04-25 11:20:27'),
+(5, 'Club Barcelona', 'hola@gmail.com', '$2b$10$nafc.TTNXw20NBI9vRdm4.tXkf3yQGMFj7G1bcA6s/FxKoIR7ElDW', 'Club', '2025-04-28 11:46:39'),
+(6, 'juanan', 'juanana@gmail.com', '$2b$10$7aXW/Cd13l9Sn69KdkCIxOg5SLSVaR.IvSABLXNvaNxoBhU95XZnK', 'Cliente', '2025-04-28 11:48:02');
 
 --
 -- Índices para tablas volcadas
@@ -184,7 +197,7 @@ ALTER TABLE `horarios_stack`
 -- AUTO_INCREMENT de la tabla `pistas`
 --
 ALTER TABLE `pistas`
-  MODIFY `id_pista` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pista` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `reservas`
@@ -196,7 +209,7 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas

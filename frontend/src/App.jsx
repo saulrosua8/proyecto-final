@@ -4,6 +4,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import MasterView from './components/MasterView';
 import AdminView from './components/AdminView';
+import ClubView from './components/ClubView';
 import './index.css';
 
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/master" element={<MasterView />} />
           <Route path="/admin" element={<AdminView />} />
+          <Route path="/club-view/:id_club" element={<ClubView />} />
           <Route path="/" element={<Login />} />
         </Routes>
       </div>

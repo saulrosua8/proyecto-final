@@ -53,6 +53,10 @@ function Dashboard() {
     }
   };
 
+  const handleViewClub = (id_club) => {
+    navigate(`/club-view/${id_club}`);
+  };
+
   useEffect(() => {
     fetchClubs();
   }, []);
@@ -182,7 +186,10 @@ function Dashboard() {
               <h4 className="text-lg font-bold mb-2">{club.nombre}</h4>
               <p className="text-gray-600 mb-2">{club.provincia}</p>
               <p className="text-gray-600 mb-4">{club.descripcion}</p>
-              <button className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+              <button
+                onClick={() => handleViewClub(club.id_club)}
+                className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+              >
                 Ver Club
               </button>
             </div>

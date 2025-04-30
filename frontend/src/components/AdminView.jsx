@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const AdminView = () => {
   const { user, logout } = useAuth();
@@ -10,6 +11,7 @@ const AdminView = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ nombre: '', tipo: '', precio: '' });
+  const [editingPista, setEditingPista] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -60,28 +62,98 @@ const AdminView = () => {
     console.log('Usuario autenticado:', user); // Mostrar el contenido de user en consola
   }, [user]);
 
+  const handleDeletePista = async (id_pista) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar esta pista?')) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/pistas/${id_pista}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar la pista');
+        }
+
+        setPistas((prevPistas) => prevPistas.filter((pista) => pista.id_pista !== id_pista));
+      } catch (error) {
+        console.error('Error al eliminar la pista:', error);
+      }
+    }
+  };
+
+  const handleEditPista = (pista) => {
+    setFormData({ nombre: pista.nombre, tipo: pista.tipo, precio: pista.precio });
+    setShowForm(true);
+    setEditingPista(pista.id_pista); // Guardar el ID de la pista que se está editando
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-    
-      const response = await fetch('http://localhost:3000/api/pistas/create', {
-        method: 'POST',
+      const method = editingPista ? 'PUT' : 'POST';
+      const url = editingPista
+        ? `http://localhost:3000/api/pistas/${editingPista}`
+        : 'http://localhost:3000/api/pistas/create';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, id_club: clubInfo.id_club }), // Asegúrate de que el id_club esté correcto
+        body: JSON.stringify({ ...formData, id_club: clubInfo.id_club }),
       });
 
       if (!response.ok) {
-        throw new Error('Error al crear la pista');
+        throw new Error('Error al guardar la pista');
       }
 
-      const newPista = await response.json();
-      setPistas([...pistas, newPista]); // Añadir la nueva pista a la lista de pistas
+      const data = await response.json();
+
+      if (editingPista) {
+        setPistas((prevPistas) =>
+          prevPistas.map((pista) =>
+            pista.id_pista === editingPista ? { ...pista, ...formData } : pista
+          )
+        );
+      } else {
+        setPistas((prevPistas) => [...prevPistas, data.pista]);
+      }
+
       setShowForm(false);
-      setFormData({ nombre: '', tipo: '', precio: '' }); // Limpiar el formulario después de la creación
+      setFormData({ nombre: '', tipo: '', precio: '' });
+      setEditingPista(null);
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
+    }
+  };
+
+  const handleLogoUpload = async (e) => {
+    if (!clubInfo || !clubInfo.id_club) {
+      alert('No se ha cargado la información del club. Por favor, inténtalo de nuevo más tarde.');
+      return;
+    }
+  
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('logo', file);
+  
+    try {
+      const response = await fetch(`http://localhost:3000/api/clubs/uploadClubLogo/${clubInfo.id_club}`, {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al subir el logo');
+      }
+  
+      const data = await response.json();
+      console.log(data.message);
+      alert('Logo subido correctamente');
+    } catch (error) {
+      console.error('Error al subir el logo:', error);
+      alert('Hubo un error al subir el logo');
     }
   };
 
@@ -124,9 +196,19 @@ const AdminView = () => {
             {pistas.map((pista) => (
               <li key={pista.id_pista} className="flex justify-between items-center py-2 border-b">
                 <span>{pista.nombre}</span>
-                <div>
-                  <button className="text-blue-500 mr-2">Editar</button>
-                  <button className="text-red-500">Eliminar</button>
+                <div className="flex gap-2">
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={() => handleEditPista(pista)}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => handleDeletePista(pista.id_pista)}
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
               </li>
             ))}
@@ -192,14 +274,32 @@ const AdminView = () => {
         <div className="bg-white p-4 rounded shadow col-span-2">
           <h2 className="text-xl font-semibold">{clubInfo?.nombre || 'Personalización del Club'}</h2>
           <div className="mt-4">
-            <label className="block text-gray-700">Logo del Club</label>
-            <input type="file" className="mt-2" />
+            <label className="block text-gray-700 font-semibold">Logo del Club</label>
+            <input
+              type="file"
+              className="mt-2 block w-full text-sm text-gray-500
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-full file:border-0
+                         file:text-sm file:font-semibold
+                         file:bg-blue-50 file:text-blue-700
+                         hover:file:bg-blue-100"
+              onChange={handleLogoUpload}
+            />
           </div>
-          <div className="mt-4">
-            <label className="block text-gray-700">Color Principal</label>
-            <input type="color" className="mt-2" />
+          <div className="mt-4 flex items-center gap-4">
+            <label className="block text-gray-700 font-semibold">Color Principal</label>
+            <input
+              type="color"
+              className="w-16 h-8 border-2 border-gray-300 rounded cursor-pointer"
+            />
+            <span className="text-gray-600">Elige el color de tu club</span>
           </div>
-          <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Ver Vista de Usuario</button>
+          <button
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={() => navigate(`/club-view/${clubInfo?.id_club}`)}
+          >
+            Ver Vista de Usuario
+          </button>
         </div>
       </div>
     </div>

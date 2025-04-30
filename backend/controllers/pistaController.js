@@ -2,11 +2,10 @@ const db = require('../config/db');
 
 const pistaController = {
     crearPista: (req, res) => {
-        const { nombre, precio, tipo } = req.body;
-        const id_club = req.user.id_club; // Se asume que el middleware de autenticación añade el id_club al usuario
+        const { nombre, precio, tipo, id_club } = req.body; // Asegurarse de que id_club venga en el cuerpo
 
-        if (!nombre || !precio || !tipo) {
-            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        if (!nombre || !precio || !tipo || !id_club) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios, incluyendo id_club' });
         }
 
         const query = 'INSERT INTO pistas (nombre, precio, tipo, id_club) VALUES (?, ?, ?, ?)';
@@ -16,7 +15,10 @@ const pistaController = {
                 return res.status(500).json({ error: 'Error al crear la pista' });
             }
 
-            res.status(201).json({ message: 'Pista creada exitosamente' });
+            res.status(201).json({ 
+                message: 'Pista creada exitosamente',
+                pista: { id_pista: result.insertId, nombre, precio, tipo, id_club } // Devolver la pista creada
+            });
         });
     },
 
@@ -43,7 +45,6 @@ const pistaController = {
     },
 
     getAllPistas: (req, res) => {
-        console.log('Cuerpo de la solicitud:', req.body); // Registro para depuración
 
         const { id_club } = req.body; // Obtener el parámetro id_club del cuerpo de la solicitud
 

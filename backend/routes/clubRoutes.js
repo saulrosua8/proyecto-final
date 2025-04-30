@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { upload } = require('../controllers/clubController');
 const clubController = require('../controllers/clubController');
-
 // Ruta para obtener todos los clubes
 router.get('/', clubController.getAllClubs);
 
@@ -11,6 +11,10 @@ router.get('/search', clubController.searchClubs);
 // Ruta para crear un club
 router.post('/create', clubController.createClub);
 
+// Ruta para subir el logo de un club
+router.post('/uploadClubLogo/:id_club', upload.single('logo'),       // <— aquí
+clubController.uploadClubLogo);
+
 // Ruta para borrar un club
 router.delete('/:id_club', clubController.deleteClub);
 
@@ -19,5 +23,8 @@ router.put('/:id_club', clubController.updateClub);
 
 // Ruta para obtener el club por ID de usuario (POST)
 router.post('/user', clubController.getClubByUserId);
+
+// Ruta para obtener un club por ID
+router.get('/:id_club', clubController.getClubById);
 
 module.exports = router;
