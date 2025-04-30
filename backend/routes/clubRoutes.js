@@ -17,4 +17,7 @@ router.delete('/:id_club', clubController.deleteClub);
 // Ruta para actualizar un club
 router.put('/:id_club', clubController.updateClub);
 
+// Ruta para obtener el club por ID de usuario (POST)
+router.post('/user', clubController.getClubByUserId);
+
 module.exports = router;

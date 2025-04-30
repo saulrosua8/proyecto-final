@@ -4,6 +4,7 @@ const cors = require('cors'); // Agregar cors
 require('dotenv').config();
 const userRoutes = require('./routes/userRoutes');
 const clubRoutes  = require('./routes/clubRoutes');
+const pistaRoutes = require('./routes/pistaRoutes');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,6 +17,7 @@ app.use(express.json());
 // Rutas
 app.use('/api', userRoutes);
 app.use('/api/clubs', clubRoutes);
+app.use('/api/pistas', pistaRoutes);
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);

@@ -25,6 +25,7 @@ const clubController = {
         `;
         const params = [`%${query}%`, `%${query}%`];
 
+        
         db.query(sql, params, (err, results) => {
             if (err) {
                 console.error('Error en la consulta:', err);
@@ -97,6 +98,28 @@ const clubController = {
             }
 
             res.status(200).json({ message: 'Club actualizado exitosamente' });
+        });
+    },
+
+    getClubByUserId: (req, res) => {
+        const { id_usuario } = req.body; // Cambiado para obtener el id_usuario del cuerpo de la solicitud
+
+        if (!id_usuario) {
+            return res.status(400).json({ error: 'El ID del usuario es requerido' });
+        }
+
+        const sql = 'SELECT * FROM clubes WHERE id_usuario = ?';
+        db.query(sql, [id_usuario], (err, results) => {
+            if (err) {
+                console.error('Error al obtener el club por ID de usuario:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: 'No se encontró un club para este usuario' });
+            }
+
+            res.status(200).json(results[0]);
         });
     }
 };

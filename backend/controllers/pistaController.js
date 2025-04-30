@@ -1,39 +1,90 @@
 const db = require('../config/db');
 
-// Crear pista
-exports.crearPista = async (req, res) => {
-  const { nombre, precio, tipo } = req.body;
-  const id_club = req.user.id_club; // Se asume que el middleware de autenticación añade el id_club al usuario
+const pistaController = {
+    crearPista: (req, res) => {
+        const { nombre, precio, tipo } = req.body;
+        const id_club = req.user.id_club; // Se asume que el middleware de autenticación añade el id_club al usuario
 
-  if (!nombre || !precio || !tipo) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-  }
+        if (!nombre || !precio || !tipo) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+        }
 
-  try {
-    const query = 'INSERT INTO pistas (nombre, precio, tipo, id_club) VALUES (?, ?, ?, ?)';
-    await db.query(query, [nombre, precio, tipo, id_club]);
-    res.status(201).json({ message: 'Pista creada exitosamente' });
-  } catch (error) {
-    console.error('Error al crear la pista:', error);
-    res.status(500).json({ error: 'Error al crear la pista' });
-  }
-};
+        const query = 'INSERT INTO pistas (nombre, precio, tipo, id_club) VALUES (?, ?, ?, ?)';
+        db.query(query, [nombre, precio, tipo, id_club], (err, result) => {
+            if (err) {
+                console.error('Error al crear la pista:', err);
+                return res.status(500).json({ error: 'Error al crear la pista' });
+            }
 
-// Borrar pista
-exports.borrarPista = async (req, res) => {
-  const { id_pista } = req.params;
+            res.status(201).json({ message: 'Pista creada exitosamente' });
+        });
+    },
 
-  try {
-    const query = 'DELETE FROM pistas WHERE id_pista = ?';
-    const [result] = await db.query(query, [id_pista]);
+    borrarPista: (req, res) => {
+        const { id_pista } = req.params;
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Pista no encontrada' });
+        if (!id_pista) {
+            return res.status(400).json({ error: 'El ID de la pista es requerido' });
+        }
+
+        const query = 'DELETE FROM pistas WHERE id_pista = ?';
+        db.query(query, [id_pista], (err, result) => {
+            if (err) {
+                console.error('Error al borrar la pista:', err);
+                return res.status(500).json({ error: 'Error al borrar la pista' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Pista no encontrada' });
+            }
+
+            res.status(200).json({ message: 'Pista eliminada exitosamente' });
+        });
+    },
+
+    getAllPistas: (req, res) => {
+        console.log('Cuerpo de la solicitud:', req.body); // Registro para depuración
+
+        const { id_club } = req.body; // Obtener el parámetro id_club del cuerpo de la solicitud
+
+        if (!id_club) {
+            return res.status(400).json({ error: 'El id_club es obligatorio' });
+        }
+
+        const query = 'SELECT * FROM pistas WHERE id_club = ?';
+        db.query(query, [id_club], (err, results) => {
+            if (err) {
+                console.error('Error al obtener pistas:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.json(results);
+        });
+    },
+
+    updatePista: (req, res) => {
+        const { id_pista } = req.params;
+        const { nombre, precio, tipo } = req.body;
+
+        if (!id_pista || !nombre || !precio || !tipo) {
+            return res.status(400).json({ error: 'Todos los campos son requeridos' });
+        }
+
+        const query = 'UPDATE pistas SET nombre = ?, precio = ?, tipo = ? WHERE id_pista = ?';
+        db.query(query, [nombre, precio, tipo, id_pista], (err, result) => {
+            if (err) {
+                console.error('Error al actualizar la pista:', err);
+                return res.status(500).json({ error: 'Error al actualizar la pista' });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Pista no encontrada' });
+            }
+
+            res.status(200).json({ message: 'Pista actualizada exitosamente' });
+        });
     }
-
-    res.status(200).json({ message: 'Pista eliminada exitosamente' });
-  } catch (error) {
-    console.error('Error al borrar la pista:', error);
-    res.status(500).json({ error: 'Error al borrar la pista' });
-  }
 };
+
+module.exports = pistaController;
