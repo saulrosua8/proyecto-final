@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import UserMenu from './UserMenu';
 
 const AdminView = () => {
   const { user, logout } = useAuth();
@@ -207,15 +207,7 @@ const AdminView = () => {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              logout();
-              navigate('/login');
-            }}
-            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-          >
-            Cerrar Sesión
-          </button>
+          <UserMenu />
         </div>
       </header>
 
@@ -257,13 +249,13 @@ const AdminView = () => {
                     className="text-blue-500 hover:text-blue-700"
                     onClick={() => handleEditPista(pista)}
                   >
-                    <FaEdit />
+                    
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
                     onClick={() => handleDeletePista(pista.id_pista)}
                   >
-                    <FaTrash />
+                    
                   </button>
                 </div>
               </li>

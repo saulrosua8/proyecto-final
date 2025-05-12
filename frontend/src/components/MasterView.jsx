@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import UserMenu from './UserMenu';
 
 function MasterView() {
   const [clubs, setClubs] = useState([]);
   const [form, setForm] = useState({
     id_club: null,
-    nombre: '',
     provincia: '',
     direccion: '',
     telefono: '',
@@ -15,7 +15,7 @@ function MasterView() {
     descripcion: '',
   });
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetch('http://localhost:3000/api/clubs')
@@ -129,15 +129,7 @@ const handleEditClub = (id_club) => {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              logout();
-              navigate('/login');
-            }}
-            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-          >
-            Cerrar Sesión
-          </button>
+          <UserMenu />
         </div>
       </header>
 

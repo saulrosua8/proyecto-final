@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useAuth } from '../context/AuthContext';
+import UserMenu from './UserMenu';
 
 // Extender dayjs para manejar formatos personalizados
 dayjs.extend(customParseFormat);
@@ -90,15 +91,7 @@ const ReservasView = () => {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-              localStorage.removeItem('token');
-              navigate('/login');
-            }}
-            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-          >
-            Cerrar Sesión
-          </button>
+          <UserMenu />
         </div>
       </header>
 

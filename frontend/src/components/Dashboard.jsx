@@ -1,6 +1,8 @@
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
+import UserMenu from './UserMenu';
 
 function Dashboard() {
   const { user, logout, login } = useAuth();
@@ -133,28 +135,7 @@ function Dashboard() {
           </h1>
         </div>
         <div className="flex items-center gap-4">
-          {user.rol === 'Administrador' && (
-            <button
-              onClick={() => navigate('/master')}
-              className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-            >
-              Panel Master
-            </button>
-          )}
-          {['Administrador', 'Club'].includes(user.rol) && (
-            <button
-              onClick={() => navigate('/admin')}
-              className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-            >
-              Panel Admin
-            </button>
-          )}
-          <button
-            onClick={handleLogout}
-            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-          >
-            Cerrar Sesión
-          </button>
+          <UserMenu />
         </div>
       </header>
 

@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import UserMenu from './UserMenu';
 
 dayjs.extend(customParseFormat); // Extender dayjs para manejar formatos personalizados
 
@@ -176,15 +177,7 @@ const ClubView = () => {
                     </h1>
                 </div>
                 <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => {
-                            logout();
-                            navigate('/login');
-                        }}
-                        className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
-                    >
-                        Cerrar Sesión
-                    </button>
+                    <UserMenu />
                 </div>
             </header>
 
