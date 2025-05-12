@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { upload } = require('../controllers/clubController');
 const clubController = require('../controllers/clubController');
+const reservasController = require('../controllers/reservasController'); // Importar el controlador de reservas
 
 // Ruta para obtener todos los clubes
 router.get('/', clubController.getAllClubs);

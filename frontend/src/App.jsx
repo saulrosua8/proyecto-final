@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import MasterView from './components/MasterView';
 import AdminView from './components/AdminView';
 import ClubView from './components/ClubView';
+import ReservasView from './components/ReservasView';
 import './index.css';
 
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/master" element={<MasterView />} />
           <Route path="/admin" element={<AdminView />} />
           <Route path="/club-view/:id_club" element={<ClubView />} />
+          <Route path="/reservas" element={<ReservasView />} />
           <Route path="/" element={<Login />} />
         </Routes>
       </div>

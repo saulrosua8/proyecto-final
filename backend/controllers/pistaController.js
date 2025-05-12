@@ -2,14 +2,14 @@ const db = require('../config/db');
 
 const pistaController = {
     crearPista: (req, res) => {
-        const { nombre, precio, tipo, id_club } = req.body; // Asegurarse de que id_club venga en el cuerpo
+        const { nombre, precio, tipo, duracion, id_club } = req.body; // Asegurarse de que id_club venga en el cuerpo
 
-        if (!nombre || !precio || !tipo || !id_club) {
+        if (!nombre || !precio || !tipo || !duracion || !id_club) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios, incluyendo id_club' });
         }
 
-        const query = 'INSERT INTO pistas (nombre, precio, tipo, id_club) VALUES (?, ?, ?, ?)';
-        db.query(query, [nombre, precio, tipo, id_club], (err, result) => {
+        const query = 'INSERT INTO pistas (nombre, precio, tipo, duracion, id_club) VALUES (?, ?, ?, ?, ?)';
+        db.query(query, [nombre, precio, tipo, duracion, id_club], (err, result) => {
             if (err) {
                 console.error('Error al crear la pista:', err);
                 return res.status(500).json({ error: 'Error al crear la pista' });
@@ -17,7 +17,7 @@ const pistaController = {
 
             res.status(201).json({ 
                 message: 'Pista creada exitosamente',
-                pista: { id_pista: result.insertId, nombre, precio, tipo, id_club } // Devolver la pista creada
+                pista: { id_pista: result.insertId, nombre, precio, tipo, duracion, id_club } // Devolver la pista creada
             });
         });
     },
@@ -66,14 +66,14 @@ const pistaController = {
 
     updatePista: (req, res) => {
         const { id_pista } = req.params;
-        const { nombre, precio, tipo } = req.body;
+        const { nombre, precio, tipo, duracion } = req.body;
 
-        if (!id_pista || !nombre || !precio || !tipo) {
+        if (!id_pista || !nombre || !precio || !tipo || !duracion) {
             return res.status(400).json({ error: 'Todos los campos son requeridos' });
         }
 
-        const query = 'UPDATE pistas SET nombre = ?, precio = ?, tipo = ? WHERE id_pista = ?';
-        db.query(query, [nombre, precio, tipo, id_pista], (err, result) => {
+        const query = 'UPDATE pistas SET nombre = ?, precio = ?, tipo = ?, duracion = ? WHERE id_pista = ?';
+        db.query(query, [nombre, precio, tipo, duracion, id_pista], (err, result) => {
             if (err) {
                 console.error('Error al actualizar la pista:', err);
                 return res.status(500).json({ error: 'Error al actualizar la pista' });

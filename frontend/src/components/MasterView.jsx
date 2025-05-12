@@ -221,9 +221,7 @@ const handleEditClub = (id_club) => {
           <div className="overflow-y-auto max-h-96">
             {clubs.map((club) => (
               <div key={club.id_club} className="border-b py-4 flex items-center gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-teal-500 text-white flex items-center justify-center rounded-full">
-                  {club.nombre.charAt(0).toUpperCase()}
-                </div>
+                
                 <div>
                   <h3 className="font-bold text-lg">{club.nombre}</h3>
                   <p className="text-sm text-gray-600">{club.provincia}</p>

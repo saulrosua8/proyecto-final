@@ -128,7 +128,7 @@ const clubController = {
     },
 
     getClubByUserId: (req, res) => {
-        const { id_usuario } = req.body; // Cambiado para obtener el id_usuario del cuerpo de la solicitud
+        const { id_usuario } = req.body;
 
         if (!id_usuario) {
             return res.status(400).json({ error: 'El ID del usuario es requerido' });
@@ -145,7 +145,7 @@ const clubController = {
                 return res.status(404).json({ error: 'No se encontró un club para este usuario' });
             }
 
-            res.status(200).json(results[0]);
+            res.status(200).json(results); // Devolver todos los resultados, no solo el primero
         });
     },
 

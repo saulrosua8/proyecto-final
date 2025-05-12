@@ -6,16 +6,18 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 const AdminView = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [clubes, setClubes] = useState([]);
+  const [clubSeleccionado, setClubSeleccionado] = useState(null);
   const [clubInfo, setClubInfo] = useState(null);
   const [pistas, setPistas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ nombre: '', tipo: '', precio: '' });
+  const [formData, setFormData] = useState({ nombre: '', tipo: '', precio: '', duracion: '' });
   const [editingPista, setEditingPista] = useState(null);
 
   useEffect(() => {
     if (user) {
-      const fetchClubData = async () => {
+      const fetchClubes = async () => {
         setLoading(true);
         try {
           const clubResponse = await fetch('http://localhost:3000/api/clubs/user', {
@@ -24,39 +26,66 @@ const AdminView = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-            body: JSON.stringify({ id_usuario: user.id }), // Pasar el id del usuario en el cuerpo
+            body: JSON.stringify({ id_usuario: user.id }),
           });
           if (!clubResponse.ok) {
-            throw new Error('Error al obtener los datos del club');
+            throw new Error('Error al obtener los datos de los clubes');
           }
-          const clubData = await clubResponse.json();
-          setClubInfo(clubData);
-
-          console.log(clubData);
-
-          // Obtener las pistas de este club
-          const pistasResponse = await fetch('http://localhost:3000/api/pistas', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id_club: clubData.id_club }), // Enviar el id_club del club
-          });
-          if (!pistasResponse.ok) {
-            throw new Error('Error al obtener las pistas');
+          const clubesData = await clubResponse.json();
+          setClubes(Array.isArray(clubesData) ? clubesData : [clubesData]);
+          
+          // Si hay clubes, seleccionar el primero por defecto
+          if (clubesData.length > 0) {
+            setClubSeleccionado(clubesData[0].id_club);
+            setClubInfo(clubesData[0]);
+            
+            // Cargar las pistas del club seleccionado
+            const pistasResponse = await fetch('http://localhost:3000/api/pistas', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id_club: clubesData[0].id_club }),
+            });
+            if (!pistasResponse.ok) {
+              throw new Error('Error al obtener las pistas');
+            }
+            const pistasData = await pistasResponse.json();
+            setPistas(pistasData);
           }
-          const pistasData = await pistasResponse.json();
-          setPistas(pistasData);
         } catch (error) {
-          console.error('Error al cargar los datos del club:', error);
+          console.error('Error al cargar los datos:', error);
         } finally {
           setLoading(false);
         }
       };
 
-      fetchClubData();
+      fetchClubes();
     }
   }, [user]);
+
+  const handleClubChange = async (id_club) => {
+    setClubSeleccionado(id_club);
+    const clubSeleccionadoInfo = clubes.find(club => club.id_club === parseInt(id_club));
+    setClubInfo(clubSeleccionadoInfo);
+    
+    try {
+      const pistasResponse = await fetch('http://localhost:3000/api/pistas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_club: id_club }),
+      });
+      if (!pistasResponse.ok) {
+        throw new Error('Error al obtener las pistas');
+      }
+      const pistasData = await pistasResponse.json();
+      setPistas(pistasData);
+    } catch (error) {
+      console.error('Error al cargar las pistas:', error);
+    }
+  };
 
   useEffect(() => {
     console.log('Usuario autenticado:', user); // Mostrar el contenido de user en consola
@@ -81,9 +110,14 @@ const AdminView = () => {
   };
 
   const handleEditPista = (pista) => {
-    setFormData({ nombre: pista.nombre, tipo: pista.tipo, precio: pista.precio });
+    setFormData({ 
+      nombre: pista.nombre, 
+      tipo: pista.tipo, 
+      precio: pista.precio,
+      duracion: pista.duracion.toString() // Convertir a string para el select
+    });
     setShowForm(true);
-    setEditingPista(pista.id_pista); // Guardar el ID de la pista que se está editando
+    setEditingPista(pista.id_pista);
   };
 
   const handleFormSubmit = async (e) => {
@@ -119,7 +153,7 @@ const AdminView = () => {
       }
 
       setShowForm(false);
-      setFormData({ nombre: '', tipo: '', precio: '' });
+      setFormData({ nombre: '', tipo: '', precio: '', duracion: '' });
       setEditingPista(null);
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
@@ -184,6 +218,26 @@ const AdminView = () => {
           </button>
         </div>
       </header>
+
+      {clubes.length > 1 && (
+        <div className="bg-white p-6 rounded shadow-md mb-6">
+          <label htmlFor="club-selector" className="block text-lg font-semibold mb-2">
+            Selecciona el club a gestionar:
+          </label>
+          <select
+            id="club-selector"
+            value={clubSeleccionado}
+            onChange={(e) => handleClubChange(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200"
+          >
+            {clubes.map((club) => (
+              <option key={club.id_club} value={club.id_club}>
+                {club.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="bg-white p-6 rounded shadow-md mb-6">
         <h3 className="text-xl font-bold mb-4">Panel de Administración</h3>
@@ -258,6 +312,19 @@ const AdminView = () => {
                   required
                 />
               </div>
+              <div className="mb-2">
+                <label className="block text-gray-700">Duración (minutos)</label>
+                <select
+                  value={formData.duracion}
+                  onChange={(e) => setFormData({ ...formData, duracion: e.target.value })}
+                  className="w-full border rounded px-2 py-1"
+                  required
+                >
+                  <option value="">Seleccione la duración</option>
+                  <option value="60">60 minutos</option>
+                  <option value="90">90 minutos</option>
+                </select>
+              </div>
               <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                 Guardar
               </button>
@@ -301,6 +368,12 @@ const AdminView = () => {
             onClick={() => navigate(`/club-view/${clubInfo?.id_club}`)}
           >
             Ver Vista de Usuario
+          </button>
+          <button
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={() => navigate('/reservas')}
+          >
+            Ver Reservas
           </button>
         </div>
       </div>
