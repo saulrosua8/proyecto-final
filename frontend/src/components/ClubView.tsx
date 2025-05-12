@@ -150,7 +150,7 @@ const ClubView = () => {
             }
 
             const data = await response.json();
-            alert(`!Reserva confirmada¡`);
+            alert(`¡Reserva confirmada!`);
             setSelectedHorario(null);
 
             // Recargar los horarios para reflejar el cambio

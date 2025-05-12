@@ -13,44 +13,46 @@ const ReservasUser = () => {
   const [tipoReservas, setTipoReservas] = useState('proximas');
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(new Date().getTime());
 
-  useEffect(() => {
-    const fetchReservas = async () => {
-      if (!user?.id) return;
+  const fetchReservas = async () => {
+    if (!user?.id) return;
 
-      setLoading(true);      try {
-        const response = await fetch(`http://localhost:3000/api/reservas/usuario/${user.id}`);
-        if (!response.ok) {
-          throw new Error('Error al obtener las reservas');
-        }
-        const data = await response.json();
-        console.log('Datos recibidos:', data); // Para depuración
-        
-        if (!data || (!data.proximas && !data.anteriores)) {
-          console.error('Formato de datos inesperado:', data);
-          throw new Error('Formato de datos inválido');
-        }
-        
-        // Usamos el tipo seleccionado para mostrar las reservas correspondientes
-        const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
-        console.log(`Reservas ${tipoReservas}:`, reservasFiltradas);
-        setReservas(reservasFiltradas || []);
-      } catch (error) {
-        console.error('Error al cargar las reservas:', error);
-        setReservas([]); // Aseguramos que siempre tengamos un array
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3000/api/reservas/usuario/${user.id}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener las reservas');
       }
-    };
+      const data = await response.json();
+      console.log('Datos recibidos:', data);
+      
+      if (!data || (!data.proximas && !data.anteriores)) {
+        console.error('Formato de datos inesperado:', data);
+        throw new Error('Formato de datos inválido');
+      }
+      
+      const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
+      console.log(`Reservas ${tipoReservas}:`, reservasFiltradas);
+      setReservas(reservasFiltradas || []);
+    } catch (error) {
+      console.error('Error al cargar las reservas:', error);
+      setReservas([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Efecto para cargar las reservas al montar el componente y cuando cambien las dependencias
+  useEffect(() => {
     fetchReservas();
-  }, [user, tipoReservas]);
+  }, [user, tipoReservas, lastUpdate]);
+
   const formatearFecha = (fecha) => {
-    // La fecha viene en formato ISO, necesitamos convertirla
     return dayjs(fecha).format('DD/MM/YYYY');
   };
+
   const formatearHora = (hora) => {
-    // La hora viene en formato HH:mm:ss
     return dayjs(hora, 'HH:mm:ss').format('HH:mm');
   };
 
@@ -68,16 +70,9 @@ const ReservasUser = () => {
         throw new Error('Error al cancelar la reserva');
       }
 
-      // Actualizar la lista de reservas después de cancelar
-      const updatedResponse = await fetch(`http://localhost:3000/api/reservas/usuario/${user.id}`);
-      if (!updatedResponse.ok) {
-        throw new Error('Error al actualizar las reservas');
-      }
-
-      const data = await updatedResponse.json();
-      const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
-      setReservas(reservasFiltradas || []);
-
+      // Forzar actualización de las reservas
+      setLastUpdate(new Date().getTime());
+      
       // Mostrar mensaje de éxito
       alert('Reserva cancelada con éxito');
     } catch (error) {
