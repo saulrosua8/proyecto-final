@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import UserMenu from './UserMenu';
 
 const AdminView = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [clubes, setClubes] = useState([]);
   const [clubSeleccionado, setClubSeleccionado] = useState(null);

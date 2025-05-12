@@ -11,4 +11,7 @@ router.post('/create', reservasController.crearReserva);
 // Obtener reservas por fecha y club
 router.get('/:fecha', reservasController.getReservasByDate);
 
+// Cancelar una reserva
+router.delete('/cancelar/:id_reserva', reservasController.cancelarReserva);
+
 module.exports = router;

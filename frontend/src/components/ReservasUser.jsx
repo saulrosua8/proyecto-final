@@ -49,10 +49,41 @@ const ReservasUser = () => {
     // La fecha viene en formato ISO, necesitamos convertirla
     return dayjs(fecha).format('DD/MM/YYYY');
   };
-
   const formatearHora = (hora) => {
     // La hora viene en formato HH:mm:ss
     return dayjs(hora, 'HH:mm:ss').format('HH:mm');
+  };
+
+  const handleCancelarReserva = async (id_reserva) => {
+    if (!window.confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/reservas/cancelar/${id_reserva}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al cancelar la reserva');
+      }
+
+      // Actualizar la lista de reservas después de cancelar
+      const updatedResponse = await fetch(`http://localhost:3000/api/reservas/usuario/${user.id}`);
+      if (!updatedResponse.ok) {
+        throw new Error('Error al actualizar las reservas');
+      }
+
+      const data = await updatedResponse.json();
+      const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
+      setReservas(reservasFiltradas || []);
+
+      // Mostrar mensaje de éxito
+      alert('Reserva cancelada con éxito');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al cancelar la reserva');
+    }
   };
 
   return (
@@ -111,11 +142,10 @@ const ReservasUser = () => {
                     <p className="font-semibold">Horario</p>
                     <p>{formatearHora(reserva.hora_inicio)} - {formatearHora(reserva.hora_fin)}</p>
                   </div>
-                </div>
-                {tipoReservas === 'proximas' && (
+                </div>                {tipoReservas === 'proximas' && (
                   <button 
-                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                    onClick={() => {/* Implementar cancelación de reserva */}}
+                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                    onClick={() => handleCancelarReserva(reserva.id_reserva)}
                   >
                     Cancelar Reserva
                   </button>

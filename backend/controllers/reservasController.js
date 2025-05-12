@@ -41,7 +41,7 @@ const reservasController = {
 
                     // Paso 2: Crear la reserva
                     db.query(
-                        'INSERT INTO reservas (id_horario, id_usuario, precio, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)',
+                        'INSERT INTO reservas (id_horario, id_usuario, precio, fecha, hora_inicio, horario_fin) VALUES (?, ?, ?, ?, ?, ?)',
                         [id_horario, id_usuario, precio, fecha, hora_inicio, hora_fin],
                         (error, resultado) => {
                             if (error) {
@@ -182,6 +182,169 @@ const reservasController = {
 
             console.log('Reservas procesadas:', reservas);
             res.status(200).json(reservas);
+        });
+    },
+
+    cancelarReserva: (req, res) => {
+        const { id_reserva } = req.params;
+
+        if (!id_reserva) {
+            return res.status(400).json({ error: 'El ID de la reserva es obligatorio' });
+        }
+
+        // Iniciar transacción
+        db.beginTransaction(err => {
+            if (err) {
+                console.error('❌ Error al iniciar la transacción:', err);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            // Paso 1: Obtener el id_horario de la reserva
+            db.query(
+                'SELECT id_horario FROM reservas WHERE id_reserva = ?',
+                [id_reserva],
+                (error, results) => {
+                    if (error) {
+                        return db.rollback(() => {
+                            console.error('❌ Error al obtener el horario de la reserva:', error);
+                            res.status(500).json({ error: 'Error al obtener el horario de la reserva' });
+                        });
+                    }
+
+                    if (results.length === 0) {
+                        return db.rollback(() => {
+                            res.status(404).json({ error: 'Reserva no encontrada' });
+                        });
+                    }
+
+                    const { id_horario } = results[0];
+
+                    // Paso 2: Eliminar la reserva
+                    db.query(
+                        'DELETE FROM reservas WHERE id_reserva = ?',
+                        [id_reserva],
+                        (deleteError) => {
+                            if (deleteError) {
+                                return db.rollback(() => {
+                                    console.error('❌ Error al eliminar la reserva:', deleteError);
+                                    res.status(500).json({ error: 'Error al eliminar la reserva' });
+                                });
+                            }
+
+                            // Paso 3: Actualizar la disponibilidad del horario a "disponible"
+                            db.query(
+                                'UPDATE horarios_stack SET disponibilidad = ? WHERE id_horario = ?',
+                                ['disponible', id_horario],
+                                (updateError) => {
+                                    if (updateError) {
+                                        return db.rollback(() => {
+                                            console.error('❌ Error al actualizar el estado del horario:', updateError);
+                                            res.status(500).json({ error: 'Error al actualizar el estado del horario' });
+                                        });
+                                    }
+
+                                    // Commit de la transacción
+                                    db.commit(err => {
+                                        if (err) {
+                                            return db.rollback(() => {
+                                                console.error('❌ Error al finalizar la transacción:', err);
+                                                res.status(500).json({ error: 'Error al finalizar la transacción' });
+                                            });
+                                        }
+
+                                        console.log('✅ Reserva cancelada exitosamente');
+                                        res.status(200).json({
+                                            message: 'Reserva cancelada exitosamente'
+                                        });
+                                    });
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+        });
+    },
+
+
+    cancelarReserva: (req, res) => {
+        const { id_reserva } = req.params;
+
+        if (!id_reserva) {
+            return res.status(400).json({ error: 'El ID de la reserva es obligatorio' });
+        }
+
+        // Iniciar transacción
+        db.beginTransaction(err => {
+            if (err) {
+                console.error('❌ Error al iniciar la transacción:', err);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            // Paso 1: Obtener el id_horario de la reserva
+            db.query(
+                'SELECT id_horario FROM reservas WHERE id_reserva = ?',
+                [id_reserva],
+                (error, results) => {
+                    if (error) {
+                        return db.rollback(() => {
+                            console.error('❌ Error al obtener el horario de la reserva:', error);
+                            res.status(500).json({ error: 'Error al obtener el horario de la reserva' });
+                        });
+                    }
+
+                    if (results.length === 0) {
+                        return db.rollback(() => {
+                            res.status(404).json({ error: 'Reserva no encontrada' });
+                        });
+                    }
+
+                    const { id_horario } = results[0];
+
+                    // Paso 2: Eliminar la reserva
+                    db.query(
+                        'DELETE FROM reservas WHERE id_reserva = ?',
+                        [id_reserva],
+                        (deleteError) => {
+                            if (deleteError) {
+                                return db.rollback(() => {
+                                    console.error('❌ Error al eliminar la reserva:', deleteError);
+                                    res.status(500).json({ error: 'Error al eliminar la reserva' });
+                                });
+                            }
+
+                            // Paso 3: Actualizar la disponibilidad del horario a "disponible"
+                            db.query(
+                                'UPDATE horarios_stack SET disponibilidad = ? WHERE id_horario = ?',
+                                ['disponible', id_horario],
+                                (updateError) => {
+                                    if (updateError) {
+                                        return db.rollback(() => {
+                                            console.error('❌ Error al actualizar el estado del horario:', updateError);
+                                            res.status(500).json({ error: 'Error al actualizar el estado del horario' });
+                                        });
+                                    }
+
+                                    // Commit de la transacción
+                                    db.commit(err => {
+                                        if (err) {
+                                            return db.rollback(() => {
+                                                console.error('❌ Error al finalizar la transacción:', err);
+                                                res.status(500).json({ error: 'Error al finalizar la transacción' });
+                                            });
+                                        }
+
+                                        console.log('✅ Reserva cancelada exitosamente');
+                                        res.status(200).json({
+                                            message: 'Reserva cancelada exitosamente'
+                                        });
+                                    });
+                                }
+                            );
+                        }
+                    );
+                }
+            );
         });
     }
 };

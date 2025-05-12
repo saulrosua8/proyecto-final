@@ -4,16 +4,11 @@ import { useState, useEffect } from 'react';
 import UserMenu from './UserMenu';
 
 function Dashboard() {
-  const { user, logout, login } = useAuth();
+  const { user,login } = useAuth();
   const navigate = useNavigate();
   const [clubs, setClubs] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const fetchClubs = async () => {
     try {
