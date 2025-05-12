@@ -32,18 +32,14 @@ const UserMenu = () => {
         className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-teal-600 focus:outline-none"
       >
         <UserCircleIcon className="w-8 h-8 text-white" />
-      </button>
-
-      {isOpen && (
+      </button>      {isOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-          {user?.rol === 'Cliente' && (
-            <button
-              onClick={() => navigate('/mis-reservas')}
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              Mis Reservas
-            </button>
-          )}
+          <button
+            onClick={() => navigate('/mis-reservas')}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          >
+            Mis Reservas
+          </button>
           
           {['Administrador', 'Club'].includes(user?.rol) && (
             <button

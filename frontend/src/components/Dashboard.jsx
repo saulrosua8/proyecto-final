@@ -1,7 +1,6 @@
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
 import UserMenu from './UserMenu';
 
 function Dashboard() {

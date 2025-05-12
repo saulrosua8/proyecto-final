@@ -13,6 +13,11 @@ interface Horario {
     hora_fin: string;
     precio: number;
     disponibilidad: 'disponible' | 'reservado';
+    pista?: Pista;
+}
+
+interface SelectedHorario extends Horario {
+    pista: Pista;
 }
 
 interface Pista {
@@ -43,7 +48,7 @@ const ClubView = () => {
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [horarios, setHorarios] = useState<Pista[]>([]);
-    const [selectedHorario, setSelectedHorario] = useState(null);
+    const [selectedHorario, setSelectedHorario] = useState<SelectedHorario | null>(null);
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -120,15 +125,15 @@ const ClubView = () => {
     const handleOutsideClick = (e) => {
         if (e.target.closest('.reserva-detalles')) return;
         setSelectedHorario(null);
-    };
-
-    const handleReserva = async () => {
+    };    const handleReserva = async () => {
         if (!selectedHorario) return;
 
         const reservaData = {
             id_horario: selectedHorario.id_horario,
-            id_usuario: 1, // Reemplazar con el ID del usuario autenticado
-            precio: selectedHorario.precio
+            id_usuario: user?.id, // Usar el ID del usuario autenticado
+            precio: selectedHorario.precio,
+            hora_inicio: selectedHorario.hora_inicio,
+            hora_fin: selectedHorario.hora_fin
         };
 
         try {
