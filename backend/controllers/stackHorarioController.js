@@ -8,8 +8,8 @@ const stackHorarioController = {
         const fechaAEliminar = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
         const fechaAGenerar = dayjs().add(8, 'day').format('YY1Y-MM-DD');
 
-        // 1. Eliminar horarios antiguos
-        const deleteQuery = 'DELETE FROM horarios_stack WHERE fecha = ?';
+        // 1. Eliminar horarios antiguos SOLO si NO están reservados
+        const deleteQuery = "DELETE FROM horarios_stack WHERE fecha = ? AND disponibilidad = 'disponible'";
         db.query(deleteQuery, [fechaAEliminar], (err, result) => {
             if (err) {
                 console.error('❌ Error al eliminar horarios:', err);

@@ -137,6 +137,82 @@ const reservasController = {
             }
         );
     },
+    // --- ENDPOINTS PARA ESTADÍSTICAS DE ADMIN ---
+    // 1. Pistas más reservadas
+    getPistasMasReservadas: (req, res) => {
+        const { id_club } = req.params;
+        const sql = `
+            SELECT p.nombre AS pista, COUNT(r.id_reserva) AS reservas
+            FROM reservas r
+            JOIN horarios_stack h ON r.id_horario = h.id_horario
+            JOIN pistas p ON h.id_pista = p.id_pista
+            WHERE p.id_club = ?
+            GROUP BY p.id_pista
+            ORDER BY reservas DESC
+            LIMIT 5
+        `;
+        db.query(sql, [id_club], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener las pistas más reservadas' });
+            res.json(results);
+        });
+    },
+
+    // 2. Horas más reservadas
+    getHorasMasReservadas: (req, res) => {
+        const { id_club } = req.params;
+        const sql = `
+            SELECT h.hora_inicio, COUNT(r.id_reserva) AS reservas
+            FROM reservas r
+            JOIN horarios_stack h ON r.id_horario = h.id_horario
+            JOIN pistas p ON h.id_pista = p.id_pista
+            WHERE p.id_club = ?
+            GROUP BY h.hora_inicio
+            ORDER BY reservas DESC
+            LIMIT 5
+        `;
+        db.query(sql, [id_club], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener las horas más reservadas' });
+            res.json(results);
+        });
+    },
+
+    // 3. Clientes con más reservas
+    getClientesMasReservas: (req, res) => {
+        const { id_club } = req.params;
+        const sql = `
+            SELECT u.nombre AS cliente, COUNT(r.id_reserva) AS reservas
+            FROM reservas r
+            JOIN usuarios u ON r.id_usuario = u.id_usuario
+            JOIN horarios_stack h ON r.id_horario = h.id_horario
+            JOIN pistas p ON h.id_pista = p.id_pista
+            WHERE p.id_club = ?
+            GROUP BY u.id_usuario
+            ORDER BY reservas DESC
+            LIMIT 5
+        `;
+        db.query(sql, [id_club], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener los clientes con más reservas' });
+            res.json(results);
+        });
+    },
+
+    // 4. Ganancias por mes
+    getGananciasPorMes: (req, res) => {
+        const { id_club } = req.params;
+        const sql = `
+            SELECT DATE_FORMAT(r.fecha, '%Y-%m') AS mes, SUM(r.precio) AS ganancias
+            FROM reservas r
+            JOIN horarios_stack h ON r.id_horario = h.id_horario
+            JOIN pistas p ON h.id_pista = p.id_pista
+            WHERE p.id_club = ?
+            GROUP BY mes
+            ORDER BY mes
+        `;
+        db.query(sql, [id_club], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener las ganancias' });
+            res.json(results);
+        });
+    },
 
     getReservasUsuario: (req, res) => {
         const { id_usuario } = req.params;

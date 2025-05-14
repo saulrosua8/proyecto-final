@@ -2,6 +2,9 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import UserMenu from './UserMenu';
+import { Bar, Pie, Line } from 'react-chartjs-2';
+import { Chart, CategoryScale, LinearScale, BarElement, ArcElement, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
+Chart.register(CategoryScale, LinearScale, BarElement, ArcElement, PointElement, LineElement, Tooltip, Legend);
 
 const AdminView = () => {
   const { user } = useAuth();
@@ -14,6 +17,10 @@ const AdminView = () => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ nombre: '', tipo: '', precio: '', duracion: '' });
   const [editingPista, setEditingPista] = useState(null);
+  const [pistasMasReservadas, setPistasMasReservadas] = useState(null);
+  const [horasMasReservadas, setHorasMasReservadas] = useState(null);
+  const [clientesMasReservas, setClientesMasReservas] = useState(null);
+  const [ganancias, setGanancias] = useState(null);
 
   useEffect(() => {
     if (user && !['Administrador', 'Club'].includes(user.rol)) {
@@ -197,6 +204,66 @@ const AdminView = () => {
     }
   };
 
+  useEffect(() => {
+    if (!clubSeleccionado) return;
+    const fetchGraficos = async () => {
+      try {
+        const [pistasRes, horasRes, clientesRes, gananciasRes] = await Promise.all([
+          fetch(`http://localhost:3000/api/reservas/mas-reservadas/${clubSeleccionado}`),
+          fetch(`http://localhost:3000/api/reservas/horas-mas-reservadas/${clubSeleccionado}`),
+          fetch(`http://localhost:3000/api/reservas/clientes-mas-reservas/${clubSeleccionado}`),
+          fetch(`http://localhost:3000/api/reservas/ganancias/${clubSeleccionado}`),
+        ]);
+        const pistasData = await pistasRes.json();
+        const horasData = await horasRes.json();
+        const clientesData = await clientesRes.json();
+        const gananciasData = await gananciasRes.json();
+
+        setPistasMasReservadas({
+          labels: pistasData.map(p => p.pista),
+          datasets: [{
+            label: 'Reservas',
+            data: pistasData.map(p => p.reservas),
+            backgroundColor: ['#14b8a6', '#0ea5e9', '#f59e42', '#f43f5e', '#6366f1'],
+          }],
+        });
+        setHorasMasReservadas({
+          labels: horasData.map(h => h.hora_inicio),
+          datasets: [{
+            label: 'Reservas',
+            data: horasData.map(h => h.reservas),
+            backgroundColor: '#0ea5e9',
+          }],
+        });
+        setClientesMasReservas({
+          labels: clientesData.map(c => c.cliente),
+          datasets: [{
+            label: 'Reservas',
+            data: clientesData.map(c => c.reservas),
+            backgroundColor: ['#f59e42', '#14b8a6', '#0ea5e9', '#f43f5e', '#6366f1'],
+          }],
+        });
+        setGanancias({
+          labels: gananciasData.map(g => g.mes),
+          datasets: [{
+            label: 'Ganancias (€)',
+            data: gananciasData.map(g => g.ganancias),
+            fill: false,
+            borderColor: '#14b8a6',
+            backgroundColor: '#14b8a6',
+            tension: 0.3,
+          }],
+        });
+      } catch {
+        setPistasMasReservadas(null);
+        setHorasMasReservadas(null);
+        setClientesMasReservas(null);
+        setGanancias(null);
+      }
+    };
+    fetchGraficos();
+  }, [clubSeleccionado]);
+
   if (loading) {
     return <div>Cargando...</div>;
   }
@@ -373,6 +440,125 @@ const AdminView = () => {
           >
             Ver Reservas
           </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 items-stretch">
+        <div className="bg-white p-4 rounded-2xl shadow flex flex-col items-center justify-center min-h-[260px] h-[260px] border border-teal-100 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-bold mb-4 text-teal-700 flex items-center gap-2">
+          
+            Pistas más reservadas
+          </h3>
+          {pistasMasReservadas && pistasMasReservadas.labels.length > 0 ? (
+            <div style={{ width: '100%', height: 180 }}>
+              <Bar
+                data={pistasMasReservadas}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true },
+                    datalabels: { display: true }
+                  },
+                  scales: {
+                    x: { display: true, title: { display: true, text: 'Pista', color: '#0f766e', font: { weight: 'bold' } }, grid: { display: false } },
+                    y: { display: true, title: { display: true, text: 'Reservas', color: '#0f766e', font: { weight: 'bold' } }, beginAtZero: true, grid: { color: '#e0f2f1' } }
+                  },
+                  elements: { bar: { borderRadius: 12, borderSkipped: false } },
+                }}
+                height={180}
+                width={260}
+              />
+            </div>
+          ) : (
+            <div className="text-gray-400 text-sm">Sin datos</div>
+          )}
+        </div>
+        <div className="bg-white p-4 rounded-2xl shadow flex flex-col items-center justify-center min-h-[260px] h-[260px] border border-teal-100 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-bold mb-4 text-teal-700 flex items-center gap-2">
+            
+            Horas más reservadas
+          </h3>
+          {horasMasReservadas && horasMasReservadas.labels.length > 0 ? (
+            <div style={{ width: '100%', height: 180 }}>
+              <Bar
+                data={horasMasReservadas}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true },
+                  },
+                  scales: {
+                    x: { display: true, title: { display: true, text: 'Hora', color: '#0ea5e9', font: { weight: 'bold' } }, grid: { display: false } },
+                    y: { display: true, title: { display: true, text: 'Reservas', color: '#0ea5e9', font: { weight: 'bold' } }, beginAtZero: true, grid: { color: '#e0f2f1' } }
+                  },
+                  elements: { bar: { borderRadius: 12, borderSkipped: false } },
+                }}
+                height={180}
+                width={260}
+              />
+            </div>
+          ) : (
+            <div className="text-gray-400 text-sm">Sin datos</div>
+          )}
+        </div>
+        <div className="bg-white p-4 rounded-2xl shadow flex flex-col items-center justify-center min-h-[260px] h-[260px] border border-teal-100 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-bold mb-4 text-teal-700 flex items-center gap-2">
+            
+            Clientes con más reservas
+          </h3>
+          {clientesMasReservas && clientesMasReservas.labels.length > 0 ? (
+            <div className="flex items-center justify-center w-[180px] h-[180px] mx-auto" style={{ width: 180, height: 180 }}>
+              <Pie
+                data={clientesMasReservas}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: true, position: 'bottom', labels: { color: '#0f172a', font: { size: 14 } } },
+                    tooltip: { enabled: true },
+                  },
+                }}
+                width={180}
+                height={180}
+              />
+            </div>
+          ) : (
+            <div className="text-gray-400 text-sm">Sin datos</div>
+          )}
+        </div>
+        <div className="bg-white p-4 rounded-2xl shadow flex flex-col items-center justify-center min-h-[260px] h-[260px] border border-teal-100 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-bold mb-4 text-teal-700 flex items-center gap-2">
+           
+            Ganancias
+          </h3>
+          {ganancias && ganancias.labels.length > 0 ? (
+            <div style={{ width: '100%', height: 180 }}>
+              <Line
+                data={ganancias}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true },
+                  },
+                  scales: {
+                    x: { display: true, title: { display: true, text: 'Mes', color: '#14b8a6', font: { weight: 'bold' } }, grid: { display: false } },
+                    y: { display: true, title: { display: true, text: '€', color: '#14b8a6', font: { weight: 'bold' } }, beginAtZero: true, grid: { color: '#e0f2f1' } }
+                  },
+                  elements: { line: { borderWidth: 4, tension: 0.4 }, point: { radius: 4, backgroundColor: '#14b8a6' } },
+                }}
+                height={180}
+                width={260}
+              />
+            </div>
+          ) : (
+            <div className="text-gray-400 text-sm">Sin datos</div>
+          )}
         </div>
       </div>
     </div>

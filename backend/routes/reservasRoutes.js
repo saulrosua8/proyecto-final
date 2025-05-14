@@ -14,4 +14,10 @@ router.get('/:fecha', reservasController.getReservasByDate);
 // Cancelar una reserva
 router.delete('/cancelar/:id_reserva', reservasController.cancelarReserva);
 
+// Estadísticas para admin
+router.get('/mas-reservadas/:id_club', reservasController.getPistasMasReservadas);
+router.get('/horas-mas-reservadas/:id_club', reservasController.getHorasMasReservadas);
+router.get('/clientes-mas-reservas/:id_club', reservasController.getClientesMasReservas);
+router.get('/ganancias/:id_club', reservasController.getGananciasPorMes);
+
 module.exports = router;
