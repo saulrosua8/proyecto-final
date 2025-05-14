@@ -1,6 +1,7 @@
 const db = require('../config/db');
-const bcrypt = require('bcrypt'); // Agregar bcrypt
-const jwt = require('jsonwebtoken'); // Importar jwt
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const userController = {
     getAllUsers: (req, res) => {
@@ -92,12 +93,10 @@ const userController = {
                 if (!isMatch) {
                     res.status(401).json({ error: 'Credenciales inválidas' });
                     return;
-                }
-
-                // Generar el token JWT
+                }                // Generar el token JWT
                 const token = jwt.sign(
                     { id: user.id_usuario, nombre: user.nombre, email: user.email, rol: user.rol },
-                    'clave_secreta',
+                    process.env.JWT_SECRET,
                     { expiresIn: '1h' } // Token válido por 1 hora
                 );
 
@@ -121,9 +120,7 @@ const userController = {
             return res.status(401).json({ error: 'Token no proporcionado' });
         }
 
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, 'clave_secreta', (err, decoded) => {
+        const token = authHeader.split(' ')[1];        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ error: 'Token inválido' });
             }
