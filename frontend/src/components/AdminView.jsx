@@ -319,16 +319,20 @@ const AdminView = () => {
                 <span>{pista.nombre}</span>
                 <div className="flex gap-2">
                   <button
-                    className="text-blue-500 hover:text-blue-700"
+                    className="flex items-center gap-1 px-3 py-1 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded-lg shadow text-blue-700 font-medium transition-all duration-150"
+                    title="Editar pista"
                     onClick={() => handleEditPista(pista)}
                   >
                     
+                    Editar
                   </button>
                   <button
-                    className="text-red-500 hover:text-red-700"
+                    className="flex items-center gap-1 px-3 py-1 bg-red-100 hover:bg-red-200 border border-red-300 rounded-lg shadow text-red-700 font-medium transition-all duration-150"
+                    title="Eliminar pista"
                     onClick={() => handleDeletePista(pista.id_pista)}
                   >
                     
+                    Borrar
                   </button>
                 </div>
               </li>
@@ -368,7 +372,7 @@ const AdminView = () => {
                 </select>
               </div>
               <div className="mb-2">
-                <label className="block text-gray-700">Precio por hora</label>
+                <label className="block text-gray-700">Precio por reserva</label>
                 <input
                   type="number"
                   value={formData.precio}
@@ -428,18 +432,20 @@ const AdminView = () => {
             />
             <span className="text-gray-600">Elige el color de tu club</span>
           </div>
-          <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={() => navigate(`/club-view/${clubInfo?.id_club}`)}
-          >
-            Ver Vista de Usuario
-          </button>
-          <button
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={() => navigate('/reservas')}
-          >
-            Ver Reservas
-          </button>
+          <div className="flex gap-4 mt-4">
+            <button
+              className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-teal-400 hover:from-teal-600 hover:to-teal-500 text-white px-5 py-3 rounded-xl shadow-md text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-300"
+              onClick={() => navigate(`/club-view/${clubInfo?.id_club}`)}
+            >
+              Ver Vista de Usuario
+            </button>
+            <button
+              className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-600 hover:to-blue-500 text-white px-5 py-3 rounded-xl shadow-md text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              onClick={() => navigate('/reservas')}
+            >
+              Ver Reservas
+            </button>
+          </div>
         </div>
       </div>
 
