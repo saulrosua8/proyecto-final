@@ -16,6 +16,12 @@ const AdminView = () => {
   const [editingPista, setEditingPista] = useState(null);
 
   useEffect(() => {
+    if (user && !['Administrador', 'Club'].includes(user.rol)) {
+      navigate('/dashboard', { replace: true, state: { error: 'Acceso denegado' } });
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
     if (user) {
       const fetchClubes = async () => {
         setLoading(true);

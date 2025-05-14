@@ -15,7 +15,13 @@ function MasterView() {
     descripcion: '',
   });
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user && user.rol !== 'Administrador') {
+      navigate('/dashboard', { replace: true, state: { error: 'Acceso denegado' } });
+    }
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/clubs')
