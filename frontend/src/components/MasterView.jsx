@@ -15,6 +15,7 @@ function MasterView() {
     cierre: '22:00',
     descripcion: '',
     color: '#14b8a6',
+    url_maps: '',
   });
   const navigate = useNavigate();
   const { user, loading } = useAuth();
@@ -51,12 +52,13 @@ function MasterView() {
           apertura,
           cierre,
           descripcion,
-          color
+          color,
+          url_maps
         } = form;
         fetch(`http://localhost:3000/api/clubs/${form.id_club}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color }),
+            body: JSON.stringify({ nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, url_maps }),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -77,6 +79,7 @@ function MasterView() {
                     cierre: '22:00',
                     descripcion: '',
                     color: '#14b8a6',
+                    url_maps: '',
                 });
             })
             .catch((error) => alert(error.message));
@@ -106,6 +109,7 @@ function MasterView() {
                     cierre: '22:00',
                     descripcion: '',
                     color: '#14b8a6',
+                    url_maps: '',
                 });
             })
             .catch((error) => alert(error.message));
@@ -231,6 +235,14 @@ const handleEditClub = (id_club) => {
                 required
               />
             </div>
+            <input
+              type="text"
+              name="url_maps"
+              placeholder="URL de Google Maps"
+              value={form.url_maps}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
             <button
               type="submit"
               className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"

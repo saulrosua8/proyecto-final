@@ -34,4 +34,7 @@ router.post('/user', clubController.getClubByUserId);
 // Ruta para obtener un club por ID
 router.get('/:id_club', clubController.getClubById);
 
+// Ruta para actualizar la URL de Google Maps de un club
+router.put('/:id_club/url_maps', clubController.updateClubUrlMaps);
+
 module.exports = router;

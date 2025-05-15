@@ -460,6 +460,52 @@ const AdminView = () => {
             />
             <span className="text-gray-600">Elige el color de tu club</span>
           </div>
+          <div className="mt-4">
+            <label className="block text-gray-700 font-semibold mb-1">URL de Google Maps</label>
+            <div className="relative flex items-center">
+              <span className="absolute left-3 text-teal-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.5-7.5 11.25-7.5 11.25S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Pega aquí la URL de Google Maps"
+                className="pl-10 pr-4 py-2 w-full border-2 border-teal-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 bg-teal-50 text-gray-700 placeholder:text-teal-400"
+                value={clubInfo?.url_maps || ''}
+                onChange={async (e) => {
+                  const newUrlMaps = e.target.value;
+                  setClubInfo((prev) => ({ ...prev, url_maps: newUrlMaps }));
+                  if (clubInfo?.id_club) {
+                    try {
+                      const response = await fetch(`http://localhost:3000/api/clubs/${clubInfo.id_club}/url_maps`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url_maps: newUrlMaps })
+                      });
+                      if (!response.ok) throw new Error('Error al actualizar la URL de Google Maps');
+                    } catch {
+                      alert('Error al actualizar la URL de Google Maps');
+                    }
+                  }
+                }}
+              />
+            </div>
+            {clubInfo?.url_maps && (
+              <a
+                href={clubInfo.url_maps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center mt-2 text-teal-600 hover:text-teal-800 text-sm underline transition-colors duration-150"
+              >
+                Ver ubicación en Google Maps
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 7l-10 10M17 17V7H7" />
+                </svg>
+              </a>
+            )}
+          </div>
           <div className="flex gap-4 mt-4">
             <button
               className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-teal-400 hover:from-teal-600 hover:to-teal-500 text-white px-5 py-3 rounded-xl shadow-md text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-300"

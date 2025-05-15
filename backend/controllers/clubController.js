@@ -63,14 +63,14 @@ const clubController = {
     },
 
     createClub: (req, res) => {
-        const { nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color } = req.body;
+        const { nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color, url_maps } = req.body;
         if (!nombre || !provincia || !direccion || !telefono || !id_usuario || !apertura || !cierre || !descripcion || !color) {
             return res.status(400).json({ error: 'Todos los campos son requeridos (incluido color)' });
         }
 
-        const sql = `INSERT INTO clubes (nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const params = [nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color];
+        const sql = `INSERT INTO clubes (nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color, url_maps) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const params = [nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color, url_maps || null];
 
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -105,15 +105,14 @@ const clubController = {
     updateClub: (req, res) => {
         const { id_club } = req.params;
         // Solo extraer los campos necesarios
-        const { nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color } = req.body;
+        const { nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, url_maps } = req.body;
 
         if (!id_club || !nombre || !provincia || !direccion || !telefono || !apertura || !cierre || !descripcion || !color) {
             return res.status(400).json({ error: 'Todos los campos son requeridos (incluido color)' });
         }
 
-        // Asegurarse de que no se está enviando accidentalmente un logo BLOB u otros campos grandes
-        const sql = `UPDATE clubes SET nombre = ?, provincia = ?, direccion = ?, telefono = ?, apertura = ?, cierre = ?, descripcion = ?, color = ? WHERE id_club = ?`;
-        const params = [nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, id_club];
+        const sql = `UPDATE clubes SET nombre = ?, provincia = ?, direccion = ?, telefono = ?, apertura = ?, cierre = ?, descripcion = ?, color = ?, url_maps = ? WHERE id_club = ?`;
+        const params = [nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, url_maps || null, id_club];
 
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -230,7 +229,24 @@ const clubController = {
             res.setHeader('Content-Type', logo_mimetype);
             res.send(logo);
         });
-    }
+    },
+
+    // Actualizar solo la URL de Google Maps de un club
+    updateClubUrlMaps: (req, res) => {
+        const { id_club } = req.params;
+        const { url_maps } = req.body;
+        if (!url_maps) {
+            return res.status(400).json({ error: 'La URL de Google Maps es requerida' });
+        }
+        const sql = 'UPDATE clubes SET url_maps = ? WHERE id_club = ?';
+        db.query(sql, [url_maps, id_club], (err, result) => {
+            if (err) {
+                console.error('Error al actualizar la URL de Google Maps:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+            res.json({ message: 'URL de Google Maps actualizada correctamente' });
+        });
+    },
   };
 
 module.exports = {
