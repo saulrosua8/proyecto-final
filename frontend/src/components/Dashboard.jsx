@@ -161,7 +161,16 @@ function Dashboard() {
               <div className="flex-1">
                 <h4 className="text-lg font-bold mb-2">{club.nombre}</h4>
                 <p className="text-gray-600 mb-2">{club.provincia}</p>
-                <p className="text-gray-600 mb-4">{club.descripcion}</p>
+                {club.url_maps && (
+                  <a
+                    href={club.url_maps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-2 transition-colors duration-150 text-center"
+                  >
+                    Ver en Google Maps
+                  </a>
+                )}
                 <button
                   onClick={() => handleViewClub(club.id_club)}
                   className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
