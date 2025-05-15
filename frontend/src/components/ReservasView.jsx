@@ -117,7 +117,7 @@ const ReservasView = () => {
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
               {clubs.map((club) => (
-                <option key={club.id_club} value={club.id_club}>
+                <option key={club.id_club} value={club.id_club} style={{ color: club.color }}>
                   {club.nombre}
                 </option>
               ))}
@@ -127,21 +127,27 @@ const ReservasView = () => {
 
         <div className="grid grid-cols-1 gap-4">
           {reservas.length > 0 ? (
-            reservas.map((reserva) => (
-              <div key={reserva.id_reserva} className="border rounded-lg p-4">
-                <div className="flex flex-col gap-2">
-                  <div className="bg-teal-50 p-3 rounded-lg">
-                    <h4 className="font-bold text-teal-800">{reserva.club}</h4>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-                    <p><strong>Pista:</strong> {reserva.pista}</p>
-                    <p><strong>Hora:</strong> {formatearHora(reserva.hora_inicio)} - {formatearHora(reserva.hora_fin)}</p>
-                    <p><strong>Usuario:</strong> {reserva.usuario}</p>
-                    <p><strong>Precio:</strong> {reserva.precio}€</p>
+            reservas.map((reserva) => {
+              const club = clubs.find(c => c.nombre === reserva.club);
+              return (
+                <div key={reserva.id_reserva} className="border rounded-lg p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-teal-50 p-3 rounded-lg flex items-center gap-2">
+                      {club && (
+                        <span style={{ width: 18, height: 18, background: club.color, borderRadius: '50%', border: '1px solid #ccc', display: 'inline-block' }} title={club.color}></span>
+                      )}
+                      <h4 className="font-bold text-teal-800">{reserva.club}</h4>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                      <p><strong>Pista:</strong> {reserva.pista}</p>
+                      <p><strong>Hora:</strong> {formatearHora(reserva.hora_inicio)} - {formatearHora(reserva.hora_fin)}</p>
+                      <p><strong>Usuario:</strong> {reserva.usuario}</p>
+                      <p><strong>Precio:</strong> {reserva.precio}€</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-gray-500">No hay reservas para esta fecha.</p>
           )}

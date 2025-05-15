@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import UserMenu from './UserMenu';
@@ -38,17 +38,20 @@ interface ClubInfo {
     cierre: string;
     descripcion: string;
     logo?: string;
+    color: string;
 }
 
 const ClubView = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const { id_club } = useParams();
+    const location = useLocation();
     const [clubInfo, setClubInfo] = useState<ClubInfo | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
     const [horarios, setHorarios] = useState<Pista[]>([]);
     const [selectedHorario, setSelectedHorario] = useState<SelectedHorario | null>(null);
+    const [color, setColor] = useState<string>('#14b8a6');
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -94,10 +97,21 @@ const ClubView = () => {
         }
     }, [id_club, selectedDate]);
 
-    // Añadir log para ver cuando cambian los horarios
     useEffect(() => {
-    
-    }, [horarios]);
+        if (clubInfo?.color) {
+            setColor(clubInfo.color);
+        } else {
+            setColor('#14b8a6');
+        }
+    }, [clubInfo]);
+
+    // Aplica el color como variable CSS
+    useEffect(() => {
+        document.documentElement.style.setProperty('--club-main-color', color);
+        return () => {
+            document.documentElement.style.removeProperty('--club-main-color');
+        };
+    }, [color]);
 
     if (loading) {
         return <div>Cargando...</div>;
@@ -169,7 +183,7 @@ const ClubView = () => {
     return (
         <div className="admin-view p-4" onClick={handleOutsideClick}>
             {/* Header principal */}
-            <header className="bg-teal-500 text-white p-4 rounded mb-6 flex justify-between items-center">
+            <header className="text-white p-4 rounded mb-6 flex justify-between items-center" style={{backgroundColor: color + 'cc'}}>
                 <div className="flex items-center gap-4">
                     <a href="/dashboard">
                         <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-24 h-24 object-contain" />
@@ -197,7 +211,7 @@ const ClubView = () => {
                             e.currentTarget.src = '/src/assets/logo.png';
                         }}
                     />
-                    <h3 className="text-xl font-bold mb-4">{clubInfo?.nombre || 'Nombre del Club'}</h3>
+                    <h3 className="text-xl font-bold mb-4" style={{color: color}}>{clubInfo?.nombre || 'Nombre del Club'}</h3>
                 </div>
                 <p className="text-gray-600 mb-4">
                     {clubInfo?.descripcion || 'Descripción del club no disponible.'}
@@ -208,7 +222,8 @@ const ClubView = () => {
                     <select 
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        className="w-full p-2 border rounded focus:outline-none focus:ring-2"
+                        style={{borderColor: color, boxShadow: `0 0 0 2px ${color}55`}}
                     >
                         {proximosDias.map((fecha) => (
                             <option key={fecha} value={fecha}>
@@ -230,7 +245,8 @@ const ClubView = () => {
                                 {pista.horarios.map((horario) => (
                                     <button
                                         key={horario.id_horario}
-                                        className={`p-2 text-sm rounded bg-teal-100 hover:bg-teal-200 text-teal-800`}
+                                        className={`p-2 text-sm rounded`}
+                                        style={{backgroundColor: color + '33', color: color, border: `2px solid ${color}` }}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleHorarioClick(horario, pista);
@@ -255,7 +271,8 @@ const ClubView = () => {
                             <p className="flex items-center"><strong>Precio:&nbsp;</strong> {selectedHorario.precio}€</p>
                         </div>
                         <button
-                            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+                            className="px-4 py-2 rounded hover:opacity-90"
+                            style={{backgroundColor: color + 'cc', color: '#fff', border: `2px solid ${color}` }}
                             onClick={handleReserva}
                         >
                             Reservar Pista

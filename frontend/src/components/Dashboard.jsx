@@ -157,16 +157,18 @@ function Dashboard() {
         <h2 className="text-xl font-bold mb-4">Clubs de Pádel</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {clubs.map((club) => (
-            <div key={club.id_club} className="bg-white p-4 rounded shadow-md">
-              <h4 className="text-lg font-bold mb-2">{club.nombre}</h4>
-              <p className="text-gray-600 mb-2">{club.provincia}</p>
-              <p className="text-gray-600 mb-4">{club.descripcion}</p>
-              <button
-                onClick={() => handleViewClub(club.id_club)}
-                className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
-              >
-                Ver Club
-              </button>
+            <div key={club.id_club} className="bg-white p-4 rounded shadow-md flex items-center gap-4">
+              <div className="flex-1">
+                <h4 className="text-lg font-bold mb-2">{club.nombre}</h4>
+                <p className="text-gray-600 mb-2">{club.provincia}</p>
+                <p className="text-gray-600 mb-4">{club.descripcion}</p>
+                <button
+                  onClick={() => handleViewClub(club.id_club)}
+                  className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
+                >
+                  Ver Club
+                </button>
+              </div>
             </div>
           ))}
         </div>

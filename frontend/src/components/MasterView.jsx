@@ -7,12 +7,14 @@ function MasterView() {
   const [clubs, setClubs] = useState([]);
   const [form, setForm] = useState({
     id_club: null,
+    nombre: '',
     provincia: '',
     direccion: '',
     telefono: '',
     apertura: '08:00',
     cierre: '22:00',
     descripcion: '',
+    color: '#14b8a6',
   });
   const navigate = useNavigate();
   const { user, loading } = useAuth();
@@ -40,10 +42,21 @@ function MasterView() {
 
     if (form.id_club) {
         // Editar club existente
+        const {
+          id_club,
+          nombre,
+          provincia,
+          direccion,
+          telefono,
+          apertura,
+          cierre,
+          descripcion,
+          color
+        } = form;
         fetch(`http://localhost:3000/api/clubs/${form.id_club}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
+            body: JSON.stringify({ nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color }),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -63,6 +76,7 @@ function MasterView() {
                     apertura: '08:00',
                     cierre: '22:00',
                     descripcion: '',
+                    color: '#14b8a6',
                 });
             })
             .catch((error) => alert(error.message));
@@ -91,6 +105,7 @@ function MasterView() {
                     apertura: '08:00',
                     cierre: '22:00',
                     descripcion: '',
+                    color: '#14b8a6',
                 });
             })
             .catch((error) => alert(error.message));
@@ -205,6 +220,17 @@ const handleEditClub = (id_club) => {
               className="w-full p-2 border rounded"
               required
             ></textarea>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+              <input
+                type="color"
+                name="color"
+                value={form.color}
+                onChange={handleInputChange}
+                className="w-16 h-8 border-2 border-gray-300 rounded cursor-pointer"
+                required
+              />
+            </div>
             <button
               type="submit"
               className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600"
@@ -219,7 +245,7 @@ const handleEditClub = (id_club) => {
           <div className="overflow-y-auto max-h-96">
             {clubs.map((club) => (
               <div key={club.id_club} className="border-b py-4 flex items-center gap-4">
-                
+                <div style={{ width: 24, height: 24, background: club.color, borderRadius: '50%', border: '1px solid #ccc' }} title={club.color}></div>
                 <div>
                   <h3 className="font-bold text-lg">{club.nombre}</h3>
                   <p className="text-sm text-gray-600">{club.provincia}</p>

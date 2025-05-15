@@ -21,6 +21,7 @@ const AdminView = () => {
   const [horasMasReservadas, setHorasMasReservadas] = useState(null);
   const [clientesMasReservas, setClientesMasReservas] = useState(null);
   const [ganancias, setGanancias] = useState(null);
+  const [color, setColor] = useState('#14b8a6'); // Color por defecto
 
   useEffect(() => {
     if (user && !['Administrador', 'Club'].includes(user.rol)) {
@@ -203,6 +204,31 @@ const AdminView = () => {
       alert('Hubo un error al subir el logo');
     }
   };
+
+  const handleColorChange = async (e) => {
+    const newColor = e.target.value;
+    setColor(newColor);
+    if (clubInfo?.id_club) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/clubs/${clubInfo.id_club}/color`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ color: newColor })
+        });
+        if (!response.ok) throw new Error('Error al actualizar el color');
+      } catch {
+        alert('Error al actualizar el color');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (clubInfo?.color) {
+      setColor(clubInfo.color);
+    } else {
+      setColor('#14b8a6');
+    }
+  }, [clubInfo]);
 
   useEffect(() => {
     if (!clubSeleccionado) return;
@@ -429,13 +455,15 @@ const AdminView = () => {
             <input
               type="color"
               className="w-16 h-8 border-2 border-gray-300 rounded cursor-pointer"
+              value={color}
+              onChange={handleColorChange}
             />
             <span className="text-gray-600">Elige el color de tu club</span>
           </div>
           <div className="flex gap-4 mt-4">
             <button
               className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-teal-400 hover:from-teal-600 hover:to-teal-500 text-white px-5 py-3 rounded-xl shadow-md text-base font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-300"
-              onClick={() => navigate(`/club-view/${clubInfo?.id_club}`)}
+              onClick={() => navigate(`/club-view/${clubInfo?.id_club}?color=${encodeURIComponent(color)}`)}
             >
               Ver Vista de Usuario
             </button>

@@ -63,14 +63,14 @@ const clubController = {
     },
 
     createClub: (req, res) => {
-        const { nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion } = req.body;
-        if (!nombre || !provincia || !direccion || !telefono || !id_usuario || !apertura || !cierre || !descripcion) {
-            return res.status(400).json({ error: 'Todos los campos son requeridos' });
+        const { nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color } = req.body;
+        if (!nombre || !provincia || !direccion || !telefono || !id_usuario || !apertura || !cierre || !descripcion || !color) {
+            return res.status(400).json({ error: 'Todos los campos son requeridos (incluido color)' });
         }
 
-        const sql = `INSERT INTO clubes (nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        const params = [nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion];
+        const sql = `INSERT INTO clubes (nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const params = [nombre, provincia, direccion, telefono, id_usuario, apertura, cierre, descripcion, color];
 
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -104,14 +104,16 @@ const clubController = {
 
     updateClub: (req, res) => {
         const { id_club } = req.params;
-        const { nombre, provincia, direccion, telefono, apertura, cierre, descripcion } = req.body;
+        // Solo extraer los campos necesarios
+        const { nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color } = req.body;
 
-        if (!id_club || !nombre || !provincia || !direccion || !telefono || !apertura || !cierre || !descripcion) {
-            return res.status(400).json({ error: 'Todos los campos son requeridos' });
+        if (!id_club || !nombre || !provincia || !direccion || !telefono || !apertura || !cierre || !descripcion || !color) {
+            return res.status(400).json({ error: 'Todos los campos son requeridos (incluido color)' });
         }
 
-        const sql = `UPDATE clubes SET nombre = ?, provincia = ?, direccion = ?, telefono = ?, apertura = ?, cierre = ?, descripcion = ? WHERE id_club = ?`;
-        const params = [nombre, provincia, direccion, telefono, apertura, cierre, descripcion, id_club];
+        // Asegurarse de que no se está enviando accidentalmente un logo BLOB u otros campos grandes
+        const sql = `UPDATE clubes SET nombre = ?, provincia = ?, direccion = ?, telefono = ?, apertura = ?, cierre = ?, descripcion = ?, color = ? WHERE id_club = ?`;
+        const params = [nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, id_club];
 
         db.query(sql, params, (err, result) => {
             if (err) {
@@ -124,6 +126,25 @@ const clubController = {
             }
 
             res.status(200).json({ message: 'Club actualizado exitosamente' });
+        });
+    },
+
+    updateClubColor: (req, res) => {
+        const { id_club } = req.params;
+        const { color } = req.body;
+        if (!id_club || !color) {
+            return res.status(400).json({ error: 'ID de club y color son requeridos' });
+        }
+        const sql = 'UPDATE clubes SET color = ? WHERE id_club = ?';
+        db.query(sql, [color, id_club], (err, result) => {
+            if (err) {
+                console.error('Error al actualizar color:', err);
+                return res.status(500).json({ error: 'Error en el servidor' });
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: 'Club no encontrado' });
+            }
+            res.status(200).json({ message: 'Color actualizado exitosamente' });
         });
     },
 
