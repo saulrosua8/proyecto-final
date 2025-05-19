@@ -1,11 +1,16 @@
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
+import Spinner from './Spinner';
 
 export default function PrivateRoute({ children, rolesPermitidos }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   if (!user) {

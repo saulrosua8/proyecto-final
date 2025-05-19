@@ -1,43 +1,45 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Spinner from './Spinner';
+import toast from 'react-hot-toast';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [contraseña, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Nuevo estado para loading
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Mostrar estado de carga
-    setError(''); // Limpiar errores previos
-    try {
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, contraseña }),
-      });
+    setLoading(true);
 
+    const promesaLogin = fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, contraseña }),
+    }).then(async (response) => {
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || 'Error al iniciar sesión');
       }
-
-      localStorage.setItem('token', data.token); // Guardar token en localStorage
-      login(data.user, data.token); // Pasar token al contexto
+      localStorage.setItem('token', data.token);
+      login(data.user, data.token);
       navigate('/dashboard');
-    } catch (err) {
-      setError(err.message || 'Error al iniciar sesión');
-    } finally {
-      setLoading(false); // Finalizar estado de carga
-    }
+      return data;
+    }).finally(() => {
+      setLoading(false);
+    });
+
+    toast.promise(promesaLogin, {
+      loading: 'Iniciando sesión...',
+      success: '¡Bienvenido!',
+      error: (err) => err.message || 'Error al iniciar sesión',
+    });
   };
 
   useEffect(() => {
@@ -78,11 +80,6 @@ function Login() {
           <img src="/src/assets/logo.png" alt="Logo" className="w-32 h-32 mb-6 transform transition-transform hover:scale-105" />
           <h2 className="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Iniciar Sesión</h2>
         </div>
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
-            <p className="text-red-700">{error}</p>
-          </div>
-        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
@@ -131,11 +128,8 @@ function Login() {
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Cargando...
+                <Spinner size="small" />
+                <span className="ml-2">Cargando...</span>
               </div>
             ) : (
               'Iniciar Sesión'
