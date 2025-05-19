@@ -202,24 +202,24 @@ const ClubView = () => {
             </header>
 
             {/* Contenido del club */}
-            <div className="bg-white p-6 rounded shadow-md mb-6">
-                <div className="flex items-center mb-4">
+            <div className="bg-white p-8 rounded-xl shadow-lg mb-6">
+                <div className="flex items-center mb-6">
                     <img 
                         src={logoUrl}
                         alt="Club Logo" 
-                        className="w-16 h-16 object-cover rounded-full mr-4"
+                        className="w-20 h-20 object-cover rounded-full mr-6"
                         onError={(e) => {
                             e.currentTarget.src = '/src/assets/logo.png';
                         }}
                     />
                     <div>
-                        <h3 className="text-xl font-bold mb-2" style={{color: color}}>{clubInfo?.nombre || 'Nombre del Club'}</h3>
+                        <h3 className="text-2xl font-bold mb-3" style={{color: color}}>{clubInfo?.nombre || 'Nombre del Club'}</h3>
                         {clubInfo?.url_maps && (
                             <a
                                 href={clubInfo.url_maps}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 mt-1 rounded-lg font-semibold shadow transition-all duration-200 text-sm"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow transition-all duration-200 text-sm hover:scale-105"
                                 style={{
                                     textDecoration: 'none',
                                     background: `linear-gradient(90deg, ${color}, ${color}CC 80%)`,
@@ -236,17 +236,24 @@ const ClubView = () => {
                         )}
                     </div>
                 </div>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 mb-6 text-lg leading-relaxed">
                     {clubInfo?.descripcion || 'Descripción del club no disponible.'}
                 </p>
 
                 {/* Selector de fecha */}
-                <div className="mb-6">
+                <div className="mb-8">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Selecciona una fecha
+                    </label>
                     <select 
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-2"
-                        style={{borderColor: color, boxShadow: `0 0 0 2px ${color}55`}}
+                        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200"
+                        style={{
+                            borderColor: color,
+                            boxShadow: `0 0 0 2px ${color}55`,
+                            backgroundColor: color + '11'
+                        }}
                     >
                         {proximosDias.map((fecha) => (
                             <option key={fecha} value={fecha}>
@@ -287,18 +294,40 @@ const ClubView = () => {
                 </div>
 
                 {selectedHorario && (
-                    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t shadow-lg reserva-detalles flex justify-between items-center">
+                    <div className="fixed bottom-0 left-0 right-0 bg-white p-6 border-t shadow-xl reserva-detalles flex justify-between items-center">
                         <div className="flex gap-8 items-center">
-                            <p className="flex items-center"><strong>Pista:&nbsp;</strong> {selectedHorario.pista.nombre}</p>
-                            <p className="flex items-center"><strong>Hora:&nbsp;</strong> {dayjs(selectedHorario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - {dayjs(selectedHorario.hora_fin, 'HH:mm:ss').format('HH:mm')}</p>
-                            <p className="flex items-center"><strong>Precio:&nbsp;</strong> {selectedHorario.precio}€</p>
+                            <div className="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                </svg>
+                                <p className="text-lg"><strong>Pista:&nbsp;</strong> {selectedHorario.pista.nombre}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p className="text-lg"><strong>Hora:&nbsp;</strong> {dayjs(selectedHorario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - {dayjs(selectedHorario.hora_fin, 'HH:mm:ss').format('HH:mm')}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p className="text-lg"><strong>Precio:&nbsp;</strong> {selectedHorario.precio}€</p>
+                            </div>
                         </div>
                         <button
-                            className="px-4 py-2 rounded hover:opacity-90"
-                            style={{backgroundColor: color + 'cc', color: '#fff', border: `2px solid ${color}` }}
+                            className="px-6 py-3 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-200 flex items-center gap-2"
+                            style={{
+                                backgroundColor: color,
+                                color: '#fff',
+                                boxShadow: `0 4px 6px ${color}55`
+                            }}
                             onClick={handleReserva}
                         >
-                            Reservar Pista
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Confirmar Reserva
                         </button>
                     </div>
                 )}

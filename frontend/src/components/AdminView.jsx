@@ -296,12 +296,12 @@ const AdminView = () => {
 
   return (
     <div className="admin-view p-4">
-      <header className="bg-teal-500 text-white p-4 rounded mb-6 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <a href="/dashboard">
-            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-24 h-24 object-contain" />
+      <header className="bg-gradient-to-r from-teal-600 to-teal-500 text-white p-6 rounded-xl mb-8 flex justify-between items-center shadow-lg">
+        <div className="flex items-center gap-6">
+          <a href="/dashboard" className="hover:opacity-90 transition-opacity">
+            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-20 h-20 object-contain" />
           </a>
-          <h1 className="text-2xl font-bold cursor-pointer" onClick={() => navigate('/dashboard')}>
+          <h1 className="text-3xl font-bold cursor-pointer hover:text-teal-100 transition-colors" onClick={() => navigate('/dashboard')}>
             MatchPointRS
           </h1>
         </div>

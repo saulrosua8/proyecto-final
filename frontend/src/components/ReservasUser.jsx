@@ -119,31 +119,41 @@ const ReservasUser = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
           </div>
         ) : reservas.length > 0 ? (
-          <div className="grid gap-4">
-            {reservas.map((reserva) => (              <div key={reserva.id_reserva} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div>                    <p className="font-semibold">Club</p>
-                    <p>{reserva.club_nombre}</p>
+          <div className="grid gap-6">
+            {reservas.map((reserva) => (
+              <div key={reserva.id_reserva} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500 mb-1">Club</span>
+                    <span className="text-lg font-semibold text-gray-800">{reserva.club_nombre}</span>
                   </div>
-                  <div>
-                    <p className="font-semibold">Pista</p>
-                    <p>{reserva.pista_nombre}</p>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500 mb-1">Pista</span>
+                    <span className="text-lg font-semibold text-gray-800">{reserva.pista_nombre}</span>
                   </div>
-                  <div>
-                    <p className="font-semibold">Fecha</p>
-                    <p>{formatearFecha(reserva.fecha)}</p>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500 mb-1">Fecha</span>
+                    <span className="text-lg font-semibold text-gray-800">{formatearFecha(reserva.fecha)}</span>
                   </div>
-                  <div>
-                    <p className="font-semibold">Horario</p>
-                    <p>{formatearHora(reserva.hora_inicio)} - {formatearHora(reserva.hora_fin)}</p>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500 mb-1">Horario</span>
+                    <span className="text-lg font-semibold text-gray-800">
+                      {formatearHora(reserva.hora_inicio)} - {formatearHora(reserva.hora_fin)}
+                    </span>
                   </div>
-                </div>                {tipoReservas === 'proximas' && (
-                  <button 
-                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-                    onClick={() => handleCancelarReserva(reserva.id_reserva)}
-                  >
-                    Cancelar Reserva
-                  </button>
+                </div>
+                {tipoReservas === 'proximas' && (
+                  <div className="mt-6 flex justify-end">
+                    <button 
+                      className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                      onClick={() => handleCancelarReserva(reserva.id_reserva)}
+                    >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      Cancelar Reserva
+                    </button>
+                  </div>
                 )}
               </div>
             ))}

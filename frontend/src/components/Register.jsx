@@ -32,61 +32,119 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <img src="/src/assets/logo.png" alt="Logo" className="mx-auto mb-4 w-32 h-32" />
-        <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Registrarse</h2>
-        {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2" htmlFor="nombre">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600">
+      <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 hover:shadow-3xl">
+        <div className="flex flex-col items-center">
+          <img src="/src/assets/logo.png" alt="Logo" className="w-32 h-32 mb-6 transform transition-transform hover:scale-105" />
+          <h2 className="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Registro</h2>
+        </div>
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="nombre">
               Nombre
             </label>
-            <input
-              type="text"
-              id="nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-              required
-            />
+            <div className="relative">
+              <input
+                type="text"
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200"
+                required
+                disabled={loading}
+                placeholder="Tu nombre completo"
+              />
+              <svg className="w-6 h-6 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2" htmlFor="email">
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
               Email
             </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-              required
-            />
+            <div className="relative">
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200"
+                required
+                disabled={loading}
+                placeholder="tu@email.com"
+              />
+              <svg className="w-6 h-6 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+              </svg>
+            </div>
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2" htmlFor="password">
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="password">
               Contraseña
             </label>
-            <input
-              type="password"
-              id="password"
-              value={contraseña}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-              required
-            />
+            <div className="relative">
+              <input
+                type="password"
+                id="password"
+                value={contraseña}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200"
+                required
+                disabled={loading}
+                placeholder="••••••••"
+              />
+              <svg className="w-6 h-6 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="confirmPassword">
+              Confirmar Contraseña
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full p-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200"
+                required
+                disabled={loading}
+                placeholder="••••••••"
+              />
+              <svg className="w-6 h-6 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
           </div>
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+            className="w-full bg-gradient-to-r from-teal-600 to-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Registrarse
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Registrando...
+              </div>
+            ) : (
+              'Registrarse'
+            )}
           </button>
         </form>
-        <p className="mt-6 text-center text-gray-700">
+        <p className="mt-8 text-center text-gray-600">
           ¿Ya tienes una cuenta?{' '}
-          <Link to="/login" className="text-blue-500 font-medium hover:underline">
+          <Link to="/login" className="text-teal-600 font-semibold hover:text-teal-700 transition-colors">
             Inicia sesión
           </Link>
         </p>
