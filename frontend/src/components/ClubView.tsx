@@ -203,16 +203,18 @@ const ClubView = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-3 sm:p-6" onClick={handleOutsideClick}>
             {/* Header principal */}
-            <header className="bg-gradient-to-r text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg" 
+            <header 
+                className="text-white p-6 sm:p-8 rounded-2xl mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-xl transform hover:scale-[1.02] transition-all duration-300"
                 style={{
-                    background: `linear-gradient(to right, ${color}, ${color}dd)`,
-                }}>
+                    background: `linear-gradient(135deg, ${color} 0%, ${color}dd 50%, ${color}aa 100%)`
+                }}
+            >
                 <div className="flex items-center gap-4 sm:gap-6">
-                    <a href="/dashboard" className="hover:opacity-90 transition-opacity">
+                    <a href="/dashboard" className="hover:opacity-80 transition-opacity transform hover:rotate-3 duration-300">
                         <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
                     </a>
                     <h1
-                        className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-white/90 transition-colors"
+                        className="text-3xl sm:text-4xl font-bold cursor-pointer hover:text-white/90 transition-colors tracking-tight"
                         onClick={() => navigate('/dashboard')}
                     >
                         MatchPointRS

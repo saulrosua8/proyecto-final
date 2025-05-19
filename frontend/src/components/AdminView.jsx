@@ -324,7 +324,7 @@ const AdminView = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
-      <header className="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg">
+      <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
         <div className="flex items-center gap-4 sm:gap-6">
           <a href="/dashboard" className="hover:opacity-90 transition-opacity">
             <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />

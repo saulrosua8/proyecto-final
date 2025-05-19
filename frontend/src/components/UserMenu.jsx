@@ -29,12 +29,12 @@ const UserMenu = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200"
+        className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 relative z-50"
       >
         <UserCircleIcon className="w-8 h-8 text-white" />
       </button>
       {isOpen && (
-        <div className="absolute right-0 sm:right-0 mt-3 w-56 bg-white rounded-xl shadow-lg py-2 z-50 transform transition-all duration-200 origin-top-right -translate-x-1/2 sm:translate-x-0 left-1/2 sm:left-auto">
+        <div className="absolute right-0 sm:right-0 mt-3 w-56 bg-white rounded-xl shadow-lg py-2 transform transition-all duration-200 origin-top-right -translate-x-1/2 sm:translate-x-0 left-1/2 sm:left-auto z-[60]">
           <div className="px-4 py-2 border-b border-gray-100">
             <p className="text-sm font-medium text-gray-900">{user?.nombre}</p>
             <p className="text-xs text-gray-500">{user?.email}</p>

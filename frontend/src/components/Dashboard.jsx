@@ -118,7 +118,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
-      <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-6 sm:p-8 rounded-2xl mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-xl transform hover:scale-[1.02] transition-all duration-300">
+      <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-6 sm:p-8 rounded-2xl mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-xl transform hover:scale-[1.02] transition-all duration-300 relative z-50">
         <div className="flex items-center gap-4 sm:gap-6">
           <img 
             src="/src/assets/logo_blanco.png" 
@@ -130,14 +130,14 @@ function Dashboard() {
             MatchPointRS
           </h1>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center relative z-50">
           <UserMenu />
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
         {/* Barra de búsqueda */}
-        <form onSubmit={handleSearch} className="bg-white p-6 rounded-2xl shadow-lg border border-indigo-100/50 backdrop-blur-xl hover:shadow-xl transition-all duration-300">
+        <form onSubmit={handleSearch} className="bg-white p-6 rounded-2xl shadow-lg border border-indigo-100/50 backdrop-blur-xl hover:shadow-xl transition-all duration-300 relative z-10">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <input
