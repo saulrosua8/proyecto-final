@@ -201,47 +201,47 @@ const ClubView = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6" onClick={handleOutsideClick}>
+        <div className="min-h-screen bg-gray-50 p-3 sm:p-6" onClick={handleOutsideClick}>
             {/* Header principal */}
-            <header className="bg-gradient-to-r text-white p-6 rounded-xl mb-8 flex justify-between items-center shadow-lg" 
+            <header className="bg-gradient-to-r text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg" 
                 style={{
                     background: `linear-gradient(to right, ${color}, ${color}dd)`,
                 }}>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 sm:gap-6">
                     <a href="/dashboard" className="hover:opacity-90 transition-opacity">
-                        <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-20 h-20 object-contain" />
+                        <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
                     </a>
                     <h1
-                        className="text-3xl font-bold cursor-pointer hover:text-white/90 transition-colors"
+                        className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-white/90 transition-colors"
                         onClick={() => navigate('/dashboard')}
                     >
                         MatchPointRS
                     </h1>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center">
                     <UserMenu />
                 </div>
             </header>
 
             {/* Contenido del club */}
-            <div className="bg-white p-8 rounded-xl shadow-lg mb-6">
-                <div className="flex items-center mb-8">
+            <div className="bg-white p-4 sm:p-8 rounded-xl shadow-lg mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-8">
                     <img 
                         src={logoUrl}
                         alt="Club Logo" 
-                        className="w-24 h-24 object-cover rounded-xl mr-8 shadow-md"
+                        className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl shadow-md mx-auto sm:mx-0"
                         onError={(e) => {
                             e.currentTarget.src = '/src/assets/logo.png';
                         }}
                     />
-                    <div>
-                        <h3 className="text-3xl font-bold mb-4" style={{color: color}}>{clubInfo?.nombre || 'Nombre del Club'}</h3>
+                    <div className="text-center sm:text-left">
+                        <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4" style={{color: color}}>{clubInfo?.nombre || 'Nombre del Club'}</h3>
                         {clubInfo?.url_maps && (
                             <a
                                 href={clubInfo.url_maps}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold shadow transition-all duration-200 text-sm hover:scale-105"
+                                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-semibold shadow transition-all duration-200 text-sm hover:scale-105"
                                 style={{
                                     textDecoration: 'none',
                                     background: `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`,
@@ -250,27 +250,27 @@ const ClubView = () => {
                                 }}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.5-7.5 11.25-7.5 11.25S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.5-7.5 11.25-7.5 11.25S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z" />
                                 </svg>
                                 Ver ubicación en Google Maps
                             </a>
                         )}
                     </div>
                 </div>
-                <p className="text-gray-600 mb-8 text-lg leading-relaxed max-w-3xl">
+                <p className="text-gray-600 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed max-w-3xl">
                     {clubInfo?.descripcion || 'Descripción del club no disponible.'}
                 </p>
 
                 {/* Selector de fecha */}
-                <div className="mb-8 max-w-md">
-                    <label className="block text-gray-700 text-sm font-bold mb-3">
+                <div className="mb-6 sm:mb-8 max-w-md">
+                    <label className="block text-gray-700 text-sm font-bold mb-2 sm:mb-3">
                         Selecciona una fecha
                     </label>
                     <select 
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
-                        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200"
+                        className="w-full p-2 sm:p-3 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-200"
                         style={{
                             borderColor: color,
                             boxShadow: `0 0 0 2px ${color}22`,
@@ -286,18 +286,18 @@ const ClubView = () => {
                 </div>
 
                 {/* Horarios por pista */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {horariosDisponibles.map((pista) => (
-                        <div key={pista.id_pista} className="border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <h4 className="font-bold text-xl mb-3" style={{color: color}}>{pista.nombre}</h4>
-                            <p className="text-sm text-gray-600 mb-4">
+                        <div key={pista.id_pista} className="border rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                            <h4 className="font-bold text-lg sm:text-xl mb-2 sm:mb-3" style={{color: color}}>{pista.nombre}</h4>
+                            <p className="text-sm text-gray-600 mb-3 sm:mb-4">
                                 Tipo: {pista.tipo} - Duración: {pista.duracion} min
                             </p>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
                                 {pista.horarios.map((horario) => (
                                     <button
                                         key={horario.id_horario}
-                                        className={`p-3 text-sm rounded-lg transition-all duration-200 hover:scale-105`}
+                                        className={`p-2 sm:p-3 text-sm rounded-lg transition-all duration-200 hover:scale-105`}
                                         style={{
                                             backgroundColor: color + '11',
                                             color: color,
@@ -314,7 +314,7 @@ const ClubView = () => {
                                             {dayjs(horario.hora_fin, 'HH:mm:ss').format('HH:mm')}
                                         </span>
                                         <br />
-                                        <span className="text-base font-bold">{horario.precio}€</span>
+                                        <span className="text-sm sm:text-base font-bold">{horario.precio}€</span>
                                     </button>
                                 ))}
                             </div>
@@ -323,41 +323,43 @@ const ClubView = () => {
                 </div>
 
                 {selectedHorario && (
-                    <div className="fixed bottom-0 left-0 right-0 bg-white p-6 border-t shadow-xl reserva-detalles flex justify-between items-center">
-                        <div className="flex gap-8 items-center">
-                            <div className="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-                                </svg>
-                                <p className="text-lg"><strong>Pista:&nbsp;</strong> {selectedHorario.pista.nombre}</p>
+                    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 sm:p-6 border-t shadow-xl reserva-detalles">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 max-w-7xl mx-auto">
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-8 flex-1">
+                                <div className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6" style={{color: color}}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                                    </svg>
+                                    <p className="text-base sm:text-lg"><strong>Pista:&nbsp;</strong> {selectedHorario.pista.nombre}</p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6" style={{color: color}}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p className="text-base sm:text-lg"><strong>Hora:&nbsp;</strong> {dayjs(selectedHorario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - {dayjs(selectedHorario.hora_fin, 'HH:mm:ss').format('HH:mm')}</p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6" style={{color: color}}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p className="text-base sm:text-lg"><strong>Precio:&nbsp;</strong> {selectedHorario.precio}€</p>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <button
+                                className="w-full sm:w-auto px-4 sm:px-6 py-3 rounded-lg font-semibold text-base sm:text-lg hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                                style={{
+                                    background: `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`,
+                                    color: '#fff',
+                                    boxShadow: `0 4px 6px ${color}55`
+                                }}
+                                onClick={handleReserva}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <p className="text-lg"><strong>Hora:&nbsp;</strong> {dayjs(selectedHorario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - {dayjs(selectedHorario.hora_fin, 'HH:mm:ss').format('HH:mm')}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" style={{color: color}}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <p className="text-lg"><strong>Precio:&nbsp;</strong> {selectedHorario.precio}€</p>
-                            </div>
+                                Confirmar Reserva
+                            </button>
                         </div>
-                        <button
-                            className="px-6 py-3 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-200 flex items-center gap-2"
-                            style={{
-                                background: `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`,
-                                color: '#fff',
-                                boxShadow: `0 4px 6px ${color}55`
-                            }}
-                            onClick={handleReserva}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Confirmar Reserva
-                        </button>
                     </div>
                 )}
             </div>

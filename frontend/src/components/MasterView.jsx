@@ -212,146 +212,146 @@ const handleEditClub = (id_club) => {
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white p-6 rounded-xl mb-8 flex justify-between items-center shadow-lg">
-        <div className="flex items-center gap-6">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
+      <header className="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg">
+        <div className="flex items-center gap-4 sm:gap-6">
           <a href="/dashboard">
-            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-20 h-20 object-contain" />
+            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
           </a>
           <h1
-            className="text-3xl font-bold cursor-pointer hover:text-indigo-100 transition-colors"
+            className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-indigo-100 transition-colors"
             onClick={() => navigate('/dashboard')}
           >
             MatchPointRS
           </h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <UserMenu />
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-indigo-100">
-          <h2 className="text-2xl font-bold mb-6 text-indigo-700 flex items-center gap-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div className="bg-white p-4 sm:p-8 rounded-xl shadow-lg border border-indigo-100">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-indigo-700 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
             {form.id_club ? 'Editar Club' : 'Crear Nuevo Club'}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Nombre del Club</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Nombre del Club</label>
               <input
                 type="text"
                 name="nombre"
                 placeholder="Nombre del club"
                 value={form.nombre}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Ciudad</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Ciudad</label>
               <input
                 type="text"
                 name="provincia"
                 placeholder="Ciudad donde se ubica"
                 value={form.provincia}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Dirección</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Dirección</label>
               <input
                 type="text"
                 name="direccion"
                 placeholder="Dirección completa"
                 value={form.direccion}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Teléfono</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Teléfono</label>
               <input
                 type="text"
                 name="telefono"
                 placeholder="Número de teléfono"
                 value={form.telefono}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                 required
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               <div>
-                <label className="block text-gray-700 font-medium mb-2">Hora de Apertura</label>
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Hora de Apertura</label>
                 <input
                   type="time"
                   name="apertura"
                   value={form.apertura}
                   onChange={handleInputChange}
-                  className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                  className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                   required
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-medium mb-2">Hora de Cierre</label>
+                <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Hora de Cierre</label>
                 <input
                   type="time"
                   name="cierre"
                   value={form.cierre}
                   onChange={handleInputChange}
-                  className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                  className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Descripción</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Descripción</label>
               <textarea
                 name="descripcion"
                 placeholder="Describe el club..."
                 value={form.descripcion}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 min-h-[100px]"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200 min-h-[80px] sm:min-h-[100px]"
                 required
               ></textarea>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Color del Club</label>
-              <div className="flex items-center gap-3">
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">Color del Club</label>
+              <div className="flex items-center gap-2 sm:gap-3">
                 <input
                   type="color"
                   name="color"
                   value={form.color}
                   onChange={handleInputChange}
-                  className="w-20 h-10 border-2 border-indigo-200 rounded-lg cursor-pointer"
+                  className="w-16 sm:w-20 h-8 sm:h-10 border-2 border-indigo-200 rounded-lg cursor-pointer"
                   required
                 />
-                <span className="text-sm text-gray-600">Este color se usará en la interfaz del club</span>
+                <span className="text-xs sm:text-sm text-gray-600">Este color se usará en la interfaz del club</span>
               </div>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">URL de Google Maps</label>
+              <label className="block text-gray-700 font-medium mb-1 sm:mb-2">URL de Google Maps</label>
               <input
                 type="text"
                 name="url_maps"
                 placeholder="URL de la ubicación en Google Maps"
                 value={form.url_maps}
                 onChange={handleInputChange}
-                className="w-full p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
+                className="w-full p-2 sm:p-3 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition-all duration-200"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white py-3 rounded-lg font-bold text-lg shadow-lg hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white py-2 sm:py-3 rounded-lg font-bold text-base sm:text-lg shadow-lg hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 flex items-center justify-center gap-2"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               {form.id_club ? 'Actualizar Club' : 'Crear Club'}
@@ -359,26 +359,27 @@ const handleEditClub = (id_club) => {
           </form>
         </div>
 
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-indigo-100">
-          <h2 className="text-2xl font-bold mb-6 text-indigo-700 flex items-center gap-2">
+        <div className="bg-white p-4 sm:p-8 rounded-xl shadow-lg border border-indigo-100">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-indigo-700 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
             </svg>
             Lista de Clubs
           </h2>
-          <div className="overflow-y-auto max-h-[600px] space-y-4">
+          <div className="overflow-y-auto max-h-[400px] sm:max-h-[600px] space-y-3 sm:space-y-4">
             {clubs.map((club) => (
               <div key={club.id_club} 
-                className="p-4 rounded-lg border border-indigo-100 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center gap-4">
+                className="p-3 sm:p-4 rounded-lg border border-indigo-100 hover:shadow-md transition-all duration-200">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                   <div 
-                    style={{ width: 40, height: 40, background: club.color }} 
-                    className="rounded-lg shadow-sm border border-gray-200"
+                    style={{ width: 32, height: 32 }} 
+                    className="rounded-lg shadow-sm border border-gray-200 sm:w-[40px] sm:h-[40px]"
+                    style={{ background: club.color }}
                     title={club.color}
                   ></div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg text-gray-800">{club.nombre}</h3>
-                    <p className="text-gray-600 flex items-center gap-1">
+                    <h3 className="font-bold text-base sm:text-lg text-gray-800">{club.nombre}</h3>
+                    <p className="text-gray-600 flex items-center gap-1 text-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.5-7.5 11.25-7.5 11.25S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -386,21 +387,21 @@ const handleEditClub = (id_club) => {
                       {club.provincia}
                     </p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mt-2 sm:mt-0">
                     <button
                       onClick={() => handleEditClub(club.id_club)}
-                      className="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 flex items-center gap-1"
+                      className="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-indigo-600 transition-all duration-200 flex items-center justify-center gap-1 text-sm"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                       </svg>
                       Editar
                     </button>
                     <button
                       onClick={() => handleDeleteClub(club.id_club)}
-                      className="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-lg hover:from-red-700 hover:to-red-600 transition-all duration-200 flex items-center gap-1"
+                      className="flex-1 sm:flex-none bg-gradient-to-r from-red-600 to-red-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:from-red-700 hover:to-red-600 transition-all duration-200 flex items-center justify-center gap-1 text-sm"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                       </svg>
                       Borrar
