@@ -102,7 +102,7 @@ const AdminView = () => {
   };
 
   useEffect(() => {
-    console.log('Usuario autenticado:', user); // Mostrar el contenido de user en consola
+
   }, [user]);
 
   const handleDeletePista = async (id_pista) => {
@@ -197,7 +197,7 @@ const AdminView = () => {
       }
   
       const data = await response.json();
-      console.log(data.message);
+ 
       alert('Logo subido correctamente');
     } catch (error) {
       console.error('Error al subir el logo:', error);

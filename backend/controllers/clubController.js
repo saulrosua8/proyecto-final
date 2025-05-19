@@ -180,7 +180,7 @@ const clubController = {
         if (!req.file) {
             return res.status(400).json({ error: 'No se ha subido ningún archivo' });
         }
-        console.log(id_club);
+   
         // Obtenemos información del archivo
         const buffer = req.file.buffer;
         const filename = req.file.originalname;

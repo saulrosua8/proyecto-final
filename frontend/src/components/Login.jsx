@@ -65,7 +65,7 @@ function Login() {
           }
         })
         .catch(error => {
-          console.log(error.message);
+    
           localStorage.removeItem('token'); // Eliminar token inválido
         });
     }

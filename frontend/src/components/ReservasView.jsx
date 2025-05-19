@@ -34,7 +34,7 @@ const ReservasView = () => {
         }
         
         const data = await response.json();
-        console.log('Clubes obtenidos:', data); // Debug log
+
         const clubsArray = Array.isArray(data) ? data : [data];
         setClubs(clubsArray);
         

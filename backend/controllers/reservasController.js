@@ -2,8 +2,6 @@ const db = require('../config/db');
 
 const reservasController = {
     crearReserva: (req, res) => {
-        console.log('📥 Entrando al controlador crearReserva');
-        console.log('Datos recibidos:', req.body);
 
         const { id_horario, id_usuario, precio } = req.body;
 

@@ -25,7 +25,7 @@ const ReservasUser = () => {
         throw new Error('Error al obtener las reservas');
       }
       const data = await response.json();
-      console.log('Datos recibidos:', data);
+    
       
       if (!data || (!data.proximas && !data.anteriores)) {
         console.error('Formato de datos inesperado:', data);
@@ -33,7 +33,7 @@ const ReservasUser = () => {
       }
       
       const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
-      console.log(`Reservas ${tipoReservas}:`, reservasFiltradas);
+
       setReservas(reservasFiltradas || []);
     } catch (error) {
       console.error('Error al cargar las reservas:', error);
