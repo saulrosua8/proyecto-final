@@ -260,7 +260,7 @@ const ClubView = () => {
                         )}
                     </div>
                 </div>
-                <p className="text-gray-600 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed max-w-3xl">
+                <p className="text-gray-600 mb-6 sm:mb-8 text-base sm:text-lg leading-relaxed w-full">
                     {clubInfo?.descripcion || 'Descripción del club no disponible.'}
                 </p>
 
