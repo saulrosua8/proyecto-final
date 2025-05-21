@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
@@ -37,6 +37,7 @@ function App() {
         } />
         <Route path="/mis-reservas" element={<ReservasUser />} />
         <Route path="/" element={<Login />} />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </div>
   );
