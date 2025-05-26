@@ -27,15 +27,21 @@ const ReservasUser = () => {
         throw new Error('Error al obtener las reservas');
       }
       const data = await response.json();
-    
       
       if (!data || (!data.proximas && !data.anteriores)) {
         console.error('Formato de datos inesperado:', data);
         throw new Error('Formato de datos inválido');
       }
       
-      const reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
-
+      let reservasFiltradas = tipoReservas === 'proximas' ? data.proximas : data.anteriores;
+      if (tipoReservas === 'proximas') {
+        const now = dayjs();
+        reservasFiltradas = reservasFiltradas.filter(r => {
+          // Combina fecha y hora_inicio para comparar con el momento actual
+          const fechaHora = dayjs(`${r.fecha} ${r.hora_inicio}`, 'YYYY-MM-DD HH:mm:ss');
+          return fechaHora.isAfter(now);
+        });
+      }
       setReservas(reservasFiltradas || []);
     } catch (error) {
       console.error('Error al cargar las reservas:', error);

@@ -5,11 +5,11 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import UserMenu from './UserMenu';
 import toast from 'react-hot-toast';
+import Spinner from './Spinner';
 
 dayjs.extend(customParseFormat); // Extender dayjs para manejar formatos personalizados
 
 interface Horario {
-    id_horario: number;
     hora_inicio: string;
     hora_fin: string;
     precio: number;
@@ -128,10 +128,15 @@ const ClubView = () => {
         return dayjs().add(i, 'day').format('YYYY-MM-DD');
     });
 
-    // Filtrar horarios disponibles antes de renderizarlos
+    // Filtrar horarios disponibles y futuros antes de renderizarlos
+    const now = dayjs();
     const horariosDisponibles = horarios.map((pista) => ({
         ...pista,
-        horarios: pista.horarios.filter((horario) => horario.disponibilidad === 'disponible')
+        horarios: pista.horarios.filter((horario) => {
+            // Filtrar por disponibilidad y por fecha/hora futura
+            const fechaHorario = dayjs(`${selectedDate} ${horario.hora_inicio}`, 'YYYY-MM-DD HH:mm:ss');
+            return horario.disponibilidad === 'disponible' && fechaHorario.isAfter(now);
+        })
     }));
 
     const handleHorarioClick = (horario, pista) => {
