@@ -149,8 +149,18 @@ const ReservasUser = () => {
         ) : reservas.length > 0 ? (
           <div className="space-y-3 sm:space-y-4">
             {reservas.map((reserva) => (
-              <div key={reserva.id_reserva} className="bg-white p-4 sm:p-6 rounded-xl border border-indigo-100 hover:shadow-lg transition-all duration-200">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div key={reserva.id_reserva} className="bg-white p-4 sm:p-6 rounded-xl border border-indigo-100 hover:shadow-lg transition-all duration-200 relative overflow-hidden">
+                {/* Fondo del logo del club */}
+                {reserva.id_club && (
+                  <img
+                    src={`http://localhost:3000/api/clubs/${reserva.id_club}/logo`}
+                    alt="Logo Club"
+                    className="absolute inset-0 w-full h-full object-contain opacity-10 pointer-events-none select-none"
+                    style={{ zIndex: 0 }}
+                    onError={e => { e.currentTarget.style.display = 'none'; }}
+                  />
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 relative z-10">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-500 mb-1">Club</span>
                     <span className="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2">

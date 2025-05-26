@@ -225,7 +225,8 @@ const reservasController = {
                 h.hora_inicio,
                 h.hora_fin,
                 p.nombre AS pista_nombre,
-                c.nombre AS club_nombre
+                c.nombre AS club_nombre,
+                c.id_club AS id_club
             FROM reservas r
             JOIN horarios_stack h ON r.id_horario = h.id_horario
             JOIN pistas p ON h.id_pista = p.id_pista
