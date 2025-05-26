@@ -96,24 +96,15 @@ function Dashboard() {
   }, [user, login, navigate]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="large" />
-      </div>
-    );
+    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
   }
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500">
-          No estás autenticado.{' '}
-          <Link to="/login" className="text-blue-500 hover:underline">
-            Inicia sesión
-          </Link>
-        </p>
-      </div>
-    );
+    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
+  }
+
+  if (!clubs || clubs.length === 0) {
+    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
   }
 
   return (

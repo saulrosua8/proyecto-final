@@ -10,6 +10,7 @@ import Spinner from './Spinner';
 dayjs.extend(customParseFormat); // Extender dayjs para manejar formatos personalizados
 
 interface Horario {
+    id_horario: number;
     hora_inicio: string;
     hora_fin: string;
     precio: number;
@@ -116,7 +117,17 @@ const ClubView = () => {
     }, [color]);
 
     if (loading) {
-        return <div>Cargando...</div>;
+        return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
+    }
+
+    // Mostrar spinner si clubInfo aún no está cargado
+    if (!clubInfo) {
+        return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
+    }
+
+    // Mostrar spinner si los horarios están cargando
+    if (!horarios || horarios.length === 0) {
+        return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
     }
 
     const logoUrl = clubInfo?.logo 
