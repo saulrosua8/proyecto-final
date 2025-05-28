@@ -95,10 +95,7 @@ const ReservasView = () => {
     return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
   }
 
-  if (!reservas || reservas.length === 0) {
-    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
-  }
-
+  // Mostrar mensaje amigable si no hay reservas, pero renderizando el layout normal
   return (
     <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
@@ -114,7 +111,6 @@ const ReservasView = () => {
           <UserMenu />
         </div>
       </header>
-
       <div className="max-w-7xl mx-auto">
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-indigo-100 mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 text-indigo-700 flex items-center gap-2">
@@ -160,11 +156,7 @@ const ReservasView = () => {
         </div>
 
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-indigo-100">
-          {loading ? (
-            <div className="flex justify-center items-center min-h-[200px]">
-              <Spinner />
-            </div>
-          ) : reservas.length > 0 ? (
+          {reservas && reservas.length > 0 ? (
             <div className="space-y-3 sm:space-y-4">
               {reservas.map((reserva) => (
                 <div key={reserva.id_reserva} className="bg-white p-4 sm:p-6 rounded-xl border border-indigo-100 hover:shadow-lg transition-all duration-200">

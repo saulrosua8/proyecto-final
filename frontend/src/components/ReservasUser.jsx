@@ -27,6 +27,7 @@ const ReservasUser = () => {
         throw new Error('Error al obtener las reservas');
       }
       const data = await response.json();
+      console.log('Respuesta del endpoint de reservas:', data); // <-- Añadido para depuración
       
       if (!data || (!data.proximas && !data.anteriores)) {
         console.error('Formato de datos inesperado:', data);
@@ -110,18 +111,15 @@ const ReservasUser = () => {
     });
   };
 
-  if (loading) {
-    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
-  }
+  // if (loading) {
+  //   return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
+  // }
 
   if (!user) {
     return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
   }
 
-  if (!reservas || reservas.length === 0) {
-    return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
-  }
-
+  // Mostrar mensaje amigable si no hay reservas, pero renderizando el layout normal
   return (
     <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
@@ -148,7 +146,6 @@ const ReservasUser = () => {
           </svg>
           Mis Reservas
         </h2>
-        
         <div className="mb-4 sm:mb-6">
           <select
             value={tipoReservas}
@@ -159,12 +156,7 @@ const ReservasUser = () => {
             <option value="anteriores">Reservas Anteriores</option>
           </select>
         </div>
-
-        {loading ? (
-          <div className="py-8">
-            <Spinner />
-          </div>
-        ) : reservas.length > 0 ? (
+        {reservas && reservas.length > 0 ? (
           <div className="space-y-3 sm:space-y-4">
             {reservas.map((reserva) => (
               <div key={reserva.id_reserva} className="bg-white p-4 sm:p-6 rounded-xl border border-indigo-100 hover:shadow-lg transition-all duration-200 relative overflow-hidden">

@@ -220,7 +220,7 @@ const reservasController = {
         const query = `
             SELECT 
                 r.id_reserva,
-                r.fecha,
+                DATE_FORMAT(r.fecha, '%Y-%m-%d') AS fecha, -- Forzar string YYYY-MM-DD
                 r.precio,
                 h.hora_inicio,
                 h.hora_fin,
@@ -238,19 +238,18 @@ const reservasController = {
             if (error) {
                 console.error('Error al obtener las reservas del usuario:', error);
                 return res.status(500).json({ error: 'Error al obtener las reservas' });
-            }            console.log('Resultados de la consulta:', resultados); // Para depuración
+            }
+            console.log('Resultados de la consulta:', resultados); // Para depuración
             console.log('Fecha actual:', currentDate);
 
             // Convertir las fechas para poder compararlas correctamente
             const reservas = {
                 proximas: resultados.filter(r => {
-                    // Convertir la fecha de la reserva al formato YYYY-MM-DD
-                    const fechaReserva = new Date(r.fecha).toISOString().split('T')[0];
-                    console.log(`Comparando fechaReserva: ${fechaReserva} con currentDate: ${currentDate}`);
+                    const fechaReserva = r.fecha; // Ahora es string YYYY-MM-DD
                     return fechaReserva >= currentDate;
                 }),
                 anteriores: resultados.filter(r => {
-                    const fechaReserva = new Date(r.fecha).toISOString().split('T')[0];
+                    const fechaReserva = r.fecha;
                     return fechaReserva < currentDate;
                 })
             };
