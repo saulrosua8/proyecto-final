@@ -20,6 +20,7 @@ function MasterView() {
   });
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!loading && user && user.rol !== 'Administrador') {
@@ -28,7 +29,7 @@ function MasterView() {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/clubs')
+    fetch(`${apiUrl}/api/clubs`)
       .then((response) => response.json())
       .then((data) => setClubs(data))
       .catch((error) => console.error('Error al cargar los clubes:', error));
@@ -57,7 +58,7 @@ function MasterView() {
           url_maps
         } = form;
         
-        const promesaActualizacion = fetch(`http://localhost:3000/api/clubs/${form.id_club}`, {
+        const promesaActualizacion = fetch(`${apiUrl}/api/clubs/${form.id_club}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, url_maps }),
@@ -106,7 +107,7 @@ function MasterView() {
 
     } else {
         // Crear nuevo club
-        const promesaCreacion = fetch('http://localhost:3000/api/clubs/create', {
+        const promesaCreacion = fetch(`${apiUrl}/api/clubs/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...form, id_usuario: 1 }), // ID de usuario administrador
@@ -171,7 +172,7 @@ const handleDeleteClub = (id_club) => {
                     className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
                     onClick={async () => {
                         toast.dismiss(t.id);
-                        const promesaEliminacion = fetch(`http://localhost:3000/api/clubs/${id_club}`, {
+                        const promesaEliminacion = fetch(`${apiUrl}/api/clubs/${id_club}`, {
                             method: 'DELETE',
                         }).then(async (response) => {
                             if (!response.ok) {
@@ -216,7 +217,7 @@ const handleEditClub = (id_club) => {
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
         <div className="flex items-center gap-4 sm:gap-6">
           <a href="/dashboard">
-            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
+            <img src="/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
           </a>
           <h1
             className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-indigo-100 transition-colors"

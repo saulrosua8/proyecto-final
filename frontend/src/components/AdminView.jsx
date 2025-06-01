@@ -36,7 +36,8 @@ const AdminView = () => {
       const fetchClubes = async () => {
         setLoading(true);
         try {
-          const clubResponse = await fetch('http://localhost:3000/api/clubs/user', {
+          const apiUrl = import.meta.env.VITE_API_URL;
+          const clubResponse = await fetch(`${apiUrl}/api/clubs/user`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ const AdminView = () => {
             setClubInfo(clubesData[0]);
             
             // Cargar las pistas del club seleccionado
-            const pistasResponse = await fetch('http://localhost:3000/api/pistas', {
+            const pistasResponse = await fetch(`${apiUrl}/api/pistas`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +87,7 @@ const AdminView = () => {
     setClubInfo(clubSeleccionadoInfo);
     
     try {
-      const pistasResponse = await fetch('http://localhost:3000/api/pistas', {
+      const pistasResponse = await fetch(`${apiUrl}/api/pistas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ const AdminView = () => {
             onClick={async () => {
               toast.dismiss(t.id);
               try {
-                const response = await fetch(`http://localhost:3000/api/pistas/${id_pista}`, {
+                const response = await fetch(`${apiUrl}/api/pistas/${id_pista}`, {
                   method: 'DELETE',
                 });
 
@@ -169,8 +170,8 @@ const AdminView = () => {
     try {
       const method = editingPista ? 'PUT' : 'POST';
       const url = editingPista
-        ? `http://localhost:3000/api/pistas/${editingPista}`
-        : 'http://localhost:3000/api/pistas/create';
+        ? `${apiUrl}/api/pistas/${editingPista}`
+        : `${apiUrl}/api/pistas/create`;
 
       const response = await fetch(url, {
         method,
@@ -216,7 +217,7 @@ const AdminView = () => {
     const formData = new FormData();
     formData.append('logo', file);
   
-    const promesaSubida = fetch(`http://localhost:3000/api/clubs/uploadClubLogo/${clubInfo.id_club}`, {
+    const promesaSubida = fetch(`${apiUrl}/api/clubs/uploadClubLogo/${clubInfo.id_club}`, {
       method: 'POST',
       body: formData,
     });
@@ -232,7 +233,7 @@ const AdminView = () => {
     const newColor = e.target.value;
     setColor(newColor);
     if (clubInfo?.id_club) {
-      const promesaColor = fetch(`http://localhost:3000/api/clubs/${clubInfo.id_club}/color`, {
+      const promesaColor = fetch(`${apiUrl}/api/clubs/${clubInfo.id_club}/color`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ color: newColor })
@@ -259,10 +260,10 @@ const AdminView = () => {
     const fetchGraficos = async () => {
       try {
         const [pistasRes, horasRes, clientesRes, gananciasRes] = await Promise.all([
-          fetch(`http://localhost:3000/api/reservas/mas-reservadas/${clubSeleccionado}`),
-          fetch(`http://localhost:3000/api/reservas/horas-mas-reservadas/${clubSeleccionado}`),
-          fetch(`http://localhost:3000/api/reservas/clientes-mas-reservas/${clubSeleccionado}`),
-          fetch(`http://localhost:3000/api/reservas/ganancias/${clubSeleccionado}`),
+          fetch(`${apiUrl}/api/reservas/mas-reservadas/${clubSeleccionado}`),
+          fetch(`${apiUrl}/api/reservas/horas-mas-reservadas/${clubSeleccionado}`),
+          fetch(`${apiUrl}/api/reservas/clientes-mas-reservas/${clubSeleccionado}`),
+          fetch(`${apiUrl}/api/reservas/ganancias/${clubSeleccionado}`),
         ]);
         const pistasData = await pistasRes.json();
         const horasData = await horasRes.json();
@@ -327,7 +328,7 @@ const AdminView = () => {
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
         <div className="flex items-center gap-4 sm:gap-6">
           <a href="/dashboard" className="hover:opacity-90 transition-opacity">
-            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
+            <img src="/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
           </a>
           <h1 className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-indigo-100 transition-colors" onClick={() => navigate('/dashboard')}>
             MatchPointRS

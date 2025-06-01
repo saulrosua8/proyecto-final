@@ -17,6 +17,7 @@ const ReservasView = () => {
   const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState(null);
   const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUserClubs = async () => {
@@ -24,7 +25,7 @@ const ReservasView = () => {
       
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3000/api/clubs/user', {
+        const response = await fetch(`${apiUrl}/api/clubs/user`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ const ReservasView = () => {
       
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3000/api/reservas/${selectedDate}?id_club=${selectedClub}`);
+        const response = await fetch(`${apiUrl}/api/reservas/${selectedDate}?id_club=${selectedClub}`);
         if (!response.ok) {
           throw new Error('Error al obtener las reservas');
         }
@@ -101,7 +102,7 @@ const ReservasView = () => {
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-4 sm:p-6 rounded-xl mb-4 sm:mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-lg transform hover:scale-[1.02] transition-all duration-300">
         <div className="flex items-center gap-4 sm:gap-6">
           <a href="/dashboard">
-            <img src="/src/assets/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
+            <img src="/logo_blanco.png" alt="Logo" className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
           </a>
           <h1 className="text-2xl sm:text-3xl font-bold cursor-pointer hover:text-indigo-100 transition-colors" onClick={() => navigate('/dashboard')}>
             MatchPointRS

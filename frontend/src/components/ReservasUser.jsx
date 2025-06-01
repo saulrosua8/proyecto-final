@@ -16,13 +16,14 @@ const ReservasUser = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date().getTime());
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchReservas = async () => {
     if (!user?.id) return;
 
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/reservas/usuario/${user.id}`);
+      const response = await fetch(`${apiUrl}/api/reservas/usuario/${user.id}`);
       if (!response.ok) {
         throw new Error('Error al obtener las reservas');
       }
@@ -97,7 +98,7 @@ const ReservasUser = () => {
   };
 
   const realizarCancelacion = async (id_reserva) => {
-    const promesaCancelacion = fetch(`http://localhost:3000/api/reservas/cancelar/${id_reserva}`, {
+    const promesaCancelacion = fetch(`${apiUrl}/api/reservas/cancelar/${id_reserva}`, {
       method: 'DELETE',
     });
 
@@ -163,7 +164,7 @@ const ReservasUser = () => {
                 {/* Fondo del logo del club */}
                 {reserva.id_club && (
                   <img
-                    src={`http://localhost:3000/api/clubs/${reserva.id_club}/logo`}
+                    src={`/logo_blanco.png`}
                     alt="Logo Club"
                     className="absolute inset-0 w-full h-full object-contain opacity-10 pointer-events-none select-none"
                     style={{ zIndex: 0 }}

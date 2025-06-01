@@ -10,10 +10,11 @@ function Dashboard() {
   const [clubs, setClubs] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchClubs = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/clubs`);
+      const response = await fetch(`${apiUrl}/api/clubs`);
       if (!response.ok) {
         throw new Error('Error al obtener los clubes');
       }
@@ -26,7 +27,7 @@ function Dashboard() {
 
   const searchClubs = async (query) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/clubs/search?query=${query}`);
+      const response = await fetch(`${apiUrl}/api/clubs/search?query=${query}`);
       if (!response.ok) {
         throw new Error('Error al buscar los clubes');
       }
@@ -62,7 +63,7 @@ function Dashboard() {
     if (!user) {
       const token = localStorage.getItem('token');
       if (token) {
-        fetch('http://localhost:3000/api/validate-token', {
+        fetch(`${apiUrl}/api/validate-token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ function Dashboard() {
       <header className="bg-gradient-to-br from-indigo-600 via-indigo-500 to-purple-500 text-white p-6 sm:p-8 rounded-2xl mb-6 sm:mb-10 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 shadow-xl transform hover:scale-[1.02] transition-all duration-300 relative z-50">
         <div className="flex items-center gap-4 sm:gap-6">
           <img 
-            src="/src/assets/logo_blanco.png" 
+            src="/logo_blanco.png" 
             alt="Logo" 
             className="w-16 h-16 sm:w-20 sm:h-20 object-contain cursor-pointer hover:opacity-80 transition-opacity transform hover:rotate-3 duration-300"
             onClick={() => navigate('/dashboard')}

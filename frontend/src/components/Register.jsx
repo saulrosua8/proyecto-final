@@ -21,7 +21,8 @@ function Register() {
       return;
     }
 
-    const promesaRegistro = fetch('http://localhost:3000/api/usuarios', {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const promesaRegistro = fetch(`${apiUrl}/api/usuarios`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ function Register() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-500 via-blue-500 to-purple-600">
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 hover:shadow-3xl">
         <div className="flex flex-col items-center">
-          <img src="/src/assets/logo.png" alt="Logo" className="w-32 h-32 mb-6 transform transition-transform hover:scale-105" />
+          <img src="/logo_blanco.png" alt="Logo" className="w-32 h-32 mb-6 transform transition-transform hover:scale-105" />
           <h2 className="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Registro</h2>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">

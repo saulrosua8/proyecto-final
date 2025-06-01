@@ -3,12 +3,12 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "5173:5173"
+      - "80:80
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:3000
+      - VITE_API_URL=http://backend:3000
     networks:
       - redweb
     depends_on:

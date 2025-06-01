@@ -8,8 +8,9 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const apiUrl = import.meta.env.VITE_API_URL;
     if (token) {
-      fetch('http://localhost:3000/api/validate-token', {
+      fetch(`${apiUrl}/api/validate-token`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       })
