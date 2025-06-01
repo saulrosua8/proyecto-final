@@ -126,9 +126,12 @@ const ClubView = () => {
     }
 
     // Mostrar spinner si los horarios están cargando
-    if (!horarios || horarios.length === 0) {
+    if (!horarios) {
         return <div className="flex justify-center items-center min-h-[200px]"><Spinner /></div>;
     }
+
+    // Mostrar mensaje si no hay stackhorarios para el día seleccionado
+    const hayHorariosDisponibles = horarios.some(pista => pista.horarios && pista.horarios.length > 0);
 
     const logoUrl = clubInfo?.logo 
         ? `http://localhost:3000/api/clubs/${id_club}/logo` 
@@ -304,41 +307,47 @@ const ClubView = () => {
                 </div>
 
                 {/* Horarios por pista */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {horariosDisponibles.map((pista) => (
-                        <div key={pista.id_pista} className="border rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
-                            <h4 className="font-bold text-lg sm:text-xl mb-2 sm:mb-3" style={{color: color}}>{pista.nombre}</h4>
-                            <p className="text-sm text-gray-600 mb-3 sm:mb-4">
-                                Tipo: {pista.tipo} - Duración: {pista.duracion} min
-                            </p>
-                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                {pista.horarios.map((horario) => (
-                                    <button
-                                        key={horario.id_horario}
-                                        className={`p-2 sm:p-3 text-sm rounded-lg transition-all duration-200 hover:scale-105`}
-                                        style={{
-                                            backgroundColor: color + '11',
-                                            color: color,
-                                            border: `2px solid ${color}33`,
-                                            boxShadow: `0 2px 4px ${color}22`
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleHorarioClick(horario, pista);
-                                        }}
-                                    >
-                                        <span className="font-medium">
-                                            {dayjs(horario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - 
-                                            {dayjs(horario.hora_fin, 'HH:mm:ss').format('HH:mm')}
-                                        </span>
-                                        <br />
-                                        <span className="text-sm sm:text-base font-bold">{horario.precio}€</span>
-                                    </button>
-                                ))}
+                {hayHorariosDisponibles ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        {horariosDisponibles.map((pista) => (
+                            <div key={pista.id_pista} className="border rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+                                <h4 className="font-bold text-lg sm:text-xl mb-2 sm:mb-3" style={{color: color}}>{pista.nombre}</h4>
+                                <p className="text-sm text-gray-600 mb-3 sm:mb-4">
+                                    Tipo: {pista.tipo} - Duración: {pista.duracion} min
+                                </p>
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                    {pista.horarios.map((horario) => (
+                                        <button
+                                            key={horario.id_horario}
+                                            className={`p-2 sm:p-3 text-sm rounded-lg transition-all duration-200 hover:scale-105`}
+                                            style={{
+                                                backgroundColor: color + '11',
+                                                color: color,
+                                                border: `2px solid ${color}33`,
+                                                boxShadow: `0 2px 4px ${color}22`
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleHorarioClick(horario, pista);
+                                            }}
+                                        >
+                                            <span className="font-medium">
+                                                {dayjs(horario.hora_inicio, 'HH:mm:ss').format('HH:mm')} - 
+                                                {dayjs(horario.hora_fin, 'HH:mm:ss').format('HH:mm')}
+                                            </span>
+                                            <br />
+                                            <span className="text-sm sm:text-base font-bold">{horario.precio}€</span>
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8">
+                        <p className="text-gray-600 text-lg">No hay horarios disponibles para este día.</p>
+                    </div>
+                )}
 
                 {selectedHorario && (
                     <div className="fixed bottom-0 left-0 right-0 bg-white p-4 sm:p-6 border-t shadow-xl reserva-detalles">
