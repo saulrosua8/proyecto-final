@@ -21,8 +21,7 @@ function Register() {
       return;
     }
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const promesaRegistro = fetch(`${apiUrl}/api/usuarios`, {
+    const promesaRegistro = fetch('/api/usuarios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

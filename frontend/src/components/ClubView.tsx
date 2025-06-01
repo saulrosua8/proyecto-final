@@ -55,13 +55,12 @@ const ClubView = () => {
     const [horarios, setHorarios] = useState<Pista[]>([]);
     const [selectedHorario, setSelectedHorario] = useState<SelectedHorario | null>(null);
     const [color, setColor] = useState<string>('#14b8a6');
-    const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchClubData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`${apiUrl}/api/clubs/${id_club}`);
+                const response = await fetch(`/api/clubs/${id_club}`);
                 if (!response.ok) {
                     throw new Error('Error al obtener los datos del club');
                 }
@@ -82,7 +81,7 @@ const ClubView = () => {
     useEffect(() => {
         const fetchHorarios = async () => {
             try {
-                const response = await fetch(`${apiUrl}/api/horarios/${id_club}/${selectedDate}`);
+                const response = await fetch(`/api/horarios/${id_club}/${selectedDate}`);
                 if (!response.ok) {
                     throw new Error('Error al obtener los horarios');
                 }
@@ -132,7 +131,7 @@ const ClubView = () => {
     const hayHorariosDisponibles = horarios.some(pista => pista.horarios && pista.horarios.length > 0);
 
     const logoUrl = clubInfo?.logo 
-        ? `${apiUrl}/api/clubs/${id_club}/logo` 
+        ? `/api/clubs/${id_club}/logo` 
         : '/logo_blanco.png';
 
     // Generar un array de los próximos 11 días
@@ -169,7 +168,7 @@ const ClubView = () => {
             hora_fin: selectedHorario.hora_fin
         };
 
-        const promesaReserva = fetch(`${apiUrl}/api/reservas/create`, {
+        const promesaReserva = fetch(`/api/reservas/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -182,7 +181,7 @@ const ClubView = () => {
             const data = await response.json();
             
             // Recargar los horarios para reflejar el cambio
-            const updatedHorariosResponse = await fetch(`${apiUrl}/api/horarios/${id_club}/${selectedDate}`);
+            const updatedHorariosResponse = await fetch(`/api/horarios/${id_club}/${selectedDate}`);
             if (!updatedHorariosResponse.ok) {
                 throw new Error('Error al recargar los horarios');
             }

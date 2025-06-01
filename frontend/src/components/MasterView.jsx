@@ -20,7 +20,6 @@ function MasterView() {
   });
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!loading && user && user.rol !== 'Administrador') {
@@ -29,7 +28,7 @@ function MasterView() {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/clubs`)
+    fetch('/api/clubs')
       .then((response) => response.json())
       .then((data) => setClubs(data))
       .catch((error) => console.error('Error al cargar los clubes:', error));
@@ -58,7 +57,7 @@ function MasterView() {
           url_maps
         } = form;
         
-        const promesaActualizacion = fetch(`${apiUrl}/api/clubs/${form.id_club}`, {
+        const promesaActualizacion = fetch(`/api/clubs/${form.id_club}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, provincia, direccion, telefono, apertura, cierre, descripcion, color, url_maps }),
@@ -107,7 +106,7 @@ function MasterView() {
 
     } else {
         // Crear nuevo club
-        const promesaCreacion = fetch(`${apiUrl}/api/clubs/create`, {
+        const promesaCreacion = fetch('/api/clubs/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...form, id_usuario: 1 }), // ID de usuario administrador
@@ -172,7 +171,7 @@ const handleDeleteClub = (id_club) => {
                     className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors"
                     onClick={async () => {
                         toast.dismiss(t.id);
-                        const promesaEliminacion = fetch(`${apiUrl}/api/clubs/${id_club}`, {
+                        const promesaEliminacion = fetch(`/api/clubs/${id_club}`, {
                             method: 'DELETE',
                         }).then(async (response) => {
                             if (!response.ok) {

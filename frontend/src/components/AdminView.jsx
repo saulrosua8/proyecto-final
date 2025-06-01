@@ -36,8 +36,7 @@ const AdminView = () => {
       const fetchClubes = async () => {
         setLoading(true);
         try {
-          const apiUrl = import.meta.env.VITE_API_URL;
-          const clubResponse = await fetch(`${apiUrl}/api/clubs/user`, {
+          const clubResponse = await fetch('/api/clubs/user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -57,7 +56,7 @@ const AdminView = () => {
             setClubInfo(clubesData[0]);
             
             // Cargar las pistas del club seleccionado
-            const pistasResponse = await fetch(`${apiUrl}/api/pistas`, {
+            const pistasResponse = await fetch('/api/pistas', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +86,7 @@ const AdminView = () => {
     setClubInfo(clubSeleccionadoInfo);
     
     try {
-      const pistasResponse = await fetch(`${apiUrl}/api/pistas`, {
+      const pistasResponse = await fetch('/api/pistas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +124,7 @@ const AdminView = () => {
             onClick={async () => {
               toast.dismiss(t.id);
               try {
-                const response = await fetch(`${apiUrl}/api/pistas/${id_pista}`, {
+                const response = await fetch(`/api/pistas/${id_pista}`, {
                   method: 'DELETE',
                 });
 
@@ -170,8 +169,8 @@ const AdminView = () => {
     try {
       const method = editingPista ? 'PUT' : 'POST';
       const url = editingPista
-        ? `${apiUrl}/api/pistas/${editingPista}`
-        : `${apiUrl}/api/pistas/create`;
+        ? `/api/pistas/${editingPista}`
+        : '/api/pistas/create';
 
       const response = await fetch(url, {
         method,
@@ -217,7 +216,7 @@ const AdminView = () => {
     const formData = new FormData();
     formData.append('logo', file);
   
-    const promesaSubida = fetch(`${apiUrl}/api/clubs/uploadClubLogo/${clubInfo.id_club}`, {
+    const promesaSubida = fetch(`/api/clubs/uploadClubLogo/${clubInfo.id_club}`, {
       method: 'POST',
       body: formData,
     });
@@ -233,7 +232,7 @@ const AdminView = () => {
     const newColor = e.target.value;
     setColor(newColor);
     if (clubInfo?.id_club) {
-      const promesaColor = fetch(`${apiUrl}/api/clubs/${clubInfo.id_club}/color`, {
+      const promesaColor = fetch(`/api/clubs/${clubInfo.id_club}/color`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ color: newColor })
@@ -260,10 +259,10 @@ const AdminView = () => {
     const fetchGraficos = async () => {
       try {
         const [pistasRes, horasRes, clientesRes, gananciasRes] = await Promise.all([
-          fetch(`${apiUrl}/api/reservas/mas-reservadas/${clubSeleccionado}`),
-          fetch(`${apiUrl}/api/reservas/horas-mas-reservadas/${clubSeleccionado}`),
-          fetch(`${apiUrl}/api/reservas/clientes-mas-reservas/${clubSeleccionado}`),
-          fetch(`${apiUrl}/api/reservas/ganancias/${clubSeleccionado}`),
+          fetch(`/api/reservas/mas-reservadas/${clubSeleccionado}`),
+          fetch(`/api/reservas/horas-mas-reservadas/${clubSeleccionado}`),
+          fetch(`/api/reservas/clientes-mas-reservas/${clubSeleccionado}`),
+          fetch(`/api/reservas/ganancias/${clubSeleccionado}`),
         ]);
         const pistasData = await pistasRes.json();
         const horasData = await horasRes.json();

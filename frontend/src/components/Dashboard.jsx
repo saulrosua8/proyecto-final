@@ -10,11 +10,10 @@ function Dashboard() {
   const [clubs, setClubs] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchClubs = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/clubs`);
+      const response = await fetch('/api/clubs');
       if (!response.ok) {
         throw new Error('Error al obtener los clubes');
       }
@@ -27,7 +26,7 @@ function Dashboard() {
 
   const searchClubs = async (query) => {
     try {
-      const response = await fetch(`${apiUrl}/api/clubs/search?query=${query}`);
+      const response = await fetch(`/api/clubs/search?query=${query}`);
       if (!response.ok) {
         throw new Error('Error al buscar los clubes');
       }
@@ -63,7 +62,7 @@ function Dashboard() {
     if (!user) {
       const token = localStorage.getItem('token');
       if (token) {
-        fetch(`${apiUrl}/api/validate-token`, {
+        fetch('/api/validate-token', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

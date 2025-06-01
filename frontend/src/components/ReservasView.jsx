@@ -17,7 +17,6 @@ const ReservasView = () => {
   const [clubs, setClubs] = useState([]);
   const [selectedClub, setSelectedClub] = useState(null);
   const [loading, setLoading] = useState(true);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUserClubs = async () => {
@@ -25,7 +24,7 @@ const ReservasView = () => {
       
       setLoading(true);
       try {
-        const response = await fetch(`${apiUrl}/api/clubs/user`, {
+        const response = await fetch('/api/clubs/user', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -61,7 +60,7 @@ const ReservasView = () => {
       
       setLoading(true);
       try {
-        const response = await fetch(`${apiUrl}/api/reservas/${selectedDate}?id_club=${selectedClub}`);
+        const response = await fetch(`/api/reservas/${selectedDate}?id_club=${selectedClub}`);
         if (!response.ok) {
           throw new Error('Error al obtener las reservas');
         }

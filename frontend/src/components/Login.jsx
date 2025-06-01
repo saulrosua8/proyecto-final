@@ -15,8 +15,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
 
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const promesaLogin = fetch(`${apiUrl}/api/login`, {
+    const promesaLogin = fetch('/api/login', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -46,8 +45,7 @@ function Login() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      fetch(`${apiUrl}/api/validate-token`, {
+      fetch('/api/validate-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

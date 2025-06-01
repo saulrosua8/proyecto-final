@@ -16,14 +16,13 @@ const ReservasUser = () => {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date().getTime());
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchReservas = async () => {
     if (!user?.id) return;
 
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/reservas/usuario/${user.id}`);
+      const response = await fetch(`/api/reservas/usuario/${user.id}`);
       if (!response.ok) {
         throw new Error('Error al obtener las reservas');
       }
@@ -98,7 +97,7 @@ const ReservasUser = () => {
   };
 
   const realizarCancelacion = async (id_reserva) => {
-    const promesaCancelacion = fetch(`${apiUrl}/api/reservas/cancelar/${id_reserva}`, {
+    const promesaCancelacion = fetch(`/api/reservas/cancelar/${id_reserva}`, {
       method: 'DELETE',
     });
 
