@@ -15,7 +15,7 @@ Esto construirá y levantará los contenedores necesarios para el backend, front
 4. Para detener los contenedores, usa:
 
 ```sh
-docker-compose down
+docker-compose down -v
 ```
 
 ---
